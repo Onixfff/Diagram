@@ -120,7 +120,7 @@
             this.tableLayoutPanelMain.RowCount = 2;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1856, 899);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1540, 845);
             this.tableLayoutPanelMain.TabIndex = 7;
             // 
             // tableLayoutPanelDownMain
@@ -138,13 +138,13 @@
             this.tableLayoutPanelDownMain.RowCount = 2;
             this.tableLayoutPanelDownMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelDownMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelDownMain.Size = new System.Drawing.Size(1850, 858);
+            this.tableLayoutPanelDownMain.Size = new System.Drawing.Size(1534, 804);
             this.tableLayoutPanelDownMain.TabIndex = 7;
             // 
             // zedGraphControlMainDown
             // 
             this.zedGraphControlMainDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlMainDown.Location = new System.Drawing.Point(3, 432);
+            this.zedGraphControlMainDown.Location = new System.Drawing.Point(3, 405);
             this.zedGraphControlMainDown.Name = "zedGraphControlMainDown";
             this.zedGraphControlMainDown.ScrollGrace = 0D;
             this.zedGraphControlMainDown.ScrollMaxX = 0D;
@@ -153,7 +153,7 @@
             this.zedGraphControlMainDown.ScrollMinX = 0D;
             this.zedGraphControlMainDown.ScrollMinY = 0D;
             this.zedGraphControlMainDown.ScrollMinY2 = 0D;
-            this.zedGraphControlMainDown.Size = new System.Drawing.Size(919, 423);
+            this.zedGraphControlMainDown.Size = new System.Drawing.Size(761, 396);
             this.zedGraphControlMainDown.TabIndex = 10;
             this.zedGraphControlMainDown.UseExtendedPrintDialog = true;
             // 
@@ -169,7 +169,7 @@
             this.zedGraphControlMainUp.ScrollMinX = 0D;
             this.zedGraphControlMainUp.ScrollMinY = 0D;
             this.zedGraphControlMainUp.ScrollMinY2 = 0D;
-            this.zedGraphControlMainUp.Size = new System.Drawing.Size(919, 423);
+            this.zedGraphControlMainUp.Size = new System.Drawing.Size(761, 396);
             this.zedGraphControlMainUp.TabIndex = 5;
             this.zedGraphControlMainUp.UseExtendedPrintDialog = true;
             // 
@@ -183,18 +183,18 @@
             this.tableLayoutPanelDownRight.Controls.Add(this.zedGraphControlUpLeft2, 0, 0);
             this.tableLayoutPanelDownRight.Controls.Add(this.zedGraphControlDownLeft2, 0, 1);
             this.tableLayoutPanelDownRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelDownRight.Location = new System.Drawing.Point(928, 432);
+            this.tableLayoutPanelDownRight.Location = new System.Drawing.Point(770, 405);
             this.tableLayoutPanelDownRight.Name = "tableLayoutPanelDownRight";
             this.tableLayoutPanelDownRight.RowCount = 2;
             this.tableLayoutPanelDownRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelDownRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelDownRight.Size = new System.Drawing.Size(919, 423);
+            this.tableLayoutPanelDownRight.Size = new System.Drawing.Size(761, 396);
             this.tableLayoutPanelDownRight.TabIndex = 7;
             // 
             // zedGraphControlDownRight2
             // 
             this.zedGraphControlDownRight2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlDownRight2.Location = new System.Drawing.Point(462, 214);
+            this.zedGraphControlDownRight2.Location = new System.Drawing.Point(383, 201);
             this.zedGraphControlDownRight2.Name = "zedGraphControlDownRight2";
             this.zedGraphControlDownRight2.ScrollGrace = 0D;
             this.zedGraphControlDownRight2.ScrollMaxX = 0D;
@@ -203,14 +203,14 @@
             this.zedGraphControlDownRight2.ScrollMinX = 0D;
             this.zedGraphControlDownRight2.ScrollMinY = 0D;
             this.zedGraphControlDownRight2.ScrollMinY2 = 0D;
-            this.zedGraphControlDownRight2.Size = new System.Drawing.Size(454, 206);
+            this.zedGraphControlDownRight2.Size = new System.Drawing.Size(375, 192);
             this.zedGraphControlDownRight2.TabIndex = 6;
             this.zedGraphControlDownRight2.UseExtendedPrintDialog = true;
             // 
             // zedGraphControlUpRight2
             // 
             this.zedGraphControlUpRight2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlUpRight2.Location = new System.Drawing.Point(462, 3);
+            this.zedGraphControlUpRight2.Location = new System.Drawing.Point(383, 3);
             this.zedGraphControlUpRight2.Name = "zedGraphControlUpRight2";
             this.zedGraphControlUpRight2.ScrollGrace = 0D;
             this.zedGraphControlUpRight2.ScrollMaxX = 0D;
@@ -219,7 +219,7 @@
             this.zedGraphControlUpRight2.ScrollMinX = 0D;
             this.zedGraphControlUpRight2.ScrollMinY = 0D;
             this.zedGraphControlUpRight2.ScrollMinY2 = 0D;
-            this.zedGraphControlUpRight2.Size = new System.Drawing.Size(454, 205);
+            this.zedGraphControlUpRight2.Size = new System.Drawing.Size(375, 192);
             this.zedGraphControlUpRight2.TabIndex = 7;
             this.zedGraphControlUpRight2.UseExtendedPrintDialog = true;
             // 
@@ -235,14 +235,14 @@
             this.zedGraphControlUpLeft2.ScrollMinX = 0D;
             this.zedGraphControlUpLeft2.ScrollMinY = 0D;
             this.zedGraphControlUpLeft2.ScrollMinY2 = 0D;
-            this.zedGraphControlUpLeft2.Size = new System.Drawing.Size(453, 205);
+            this.zedGraphControlUpLeft2.Size = new System.Drawing.Size(374, 192);
             this.zedGraphControlUpLeft2.TabIndex = 8;
             this.zedGraphControlUpLeft2.UseExtendedPrintDialog = true;
             // 
             // zedGraphControlDownLeft2
             // 
             this.zedGraphControlDownLeft2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlDownLeft2.Location = new System.Drawing.Point(3, 214);
+            this.zedGraphControlDownLeft2.Location = new System.Drawing.Point(3, 201);
             this.zedGraphControlDownLeft2.Name = "zedGraphControlDownLeft2";
             this.zedGraphControlDownLeft2.ScrollGrace = 0D;
             this.zedGraphControlDownLeft2.ScrollMaxX = 0D;
@@ -251,7 +251,7 @@
             this.zedGraphControlDownLeft2.ScrollMinX = 0D;
             this.zedGraphControlDownLeft2.ScrollMinY = 0D;
             this.zedGraphControlDownLeft2.ScrollMinY2 = 0D;
-            this.zedGraphControlDownLeft2.Size = new System.Drawing.Size(453, 206);
+            this.zedGraphControlDownLeft2.Size = new System.Drawing.Size(374, 192);
             this.zedGraphControlDownLeft2.TabIndex = 9;
             this.zedGraphControlDownLeft2.UseExtendedPrintDialog = true;
             // 
@@ -265,19 +265,19 @@
             this.tableLayoutPanel1.Controls.Add(this.zedGraphControlDownLeft1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.zedGraphControlUpLeft1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(928, 3);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(770, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(919, 423);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(761, 396);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // zedGraphControlUpRight1
             // 
             this.zedGraphControlUpRight1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlUpRight1.Location = new System.Drawing.Point(462, 3);
+            this.zedGraphControlUpRight1.Location = new System.Drawing.Point(383, 3);
             this.zedGraphControlUpRight1.Name = "zedGraphControlUpRight1";
             this.zedGraphControlUpRight1.ScrollGrace = 0D;
             this.zedGraphControlUpRight1.ScrollMaxX = 0D;
@@ -286,14 +286,14 @@
             this.zedGraphControlUpRight1.ScrollMinX = 0D;
             this.zedGraphControlUpRight1.ScrollMinY = 0D;
             this.zedGraphControlUpRight1.ScrollMinY2 = 0D;
-            this.zedGraphControlUpRight1.Size = new System.Drawing.Size(454, 205);
+            this.zedGraphControlUpRight1.Size = new System.Drawing.Size(375, 192);
             this.zedGraphControlUpRight1.TabIndex = 8;
             this.zedGraphControlUpRight1.UseExtendedPrintDialog = true;
             // 
             // zedGraphControlDownRight1
             // 
             this.zedGraphControlDownRight1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlDownRight1.Location = new System.Drawing.Point(462, 214);
+            this.zedGraphControlDownRight1.Location = new System.Drawing.Point(383, 201);
             this.zedGraphControlDownRight1.Name = "zedGraphControlDownRight1";
             this.zedGraphControlDownRight1.ScrollGrace = 0D;
             this.zedGraphControlDownRight1.ScrollMaxX = 0D;
@@ -302,14 +302,14 @@
             this.zedGraphControlDownRight1.ScrollMinX = 0D;
             this.zedGraphControlDownRight1.ScrollMinY = 0D;
             this.zedGraphControlDownRight1.ScrollMinY2 = 0D;
-            this.zedGraphControlDownRight1.Size = new System.Drawing.Size(454, 206);
+            this.zedGraphControlDownRight1.Size = new System.Drawing.Size(375, 192);
             this.zedGraphControlDownRight1.TabIndex = 7;
             this.zedGraphControlDownRight1.UseExtendedPrintDialog = true;
             // 
             // zedGraphControlDownLeft1
             // 
             this.zedGraphControlDownLeft1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.zedGraphControlDownLeft1.Location = new System.Drawing.Point(3, 214);
+            this.zedGraphControlDownLeft1.Location = new System.Drawing.Point(3, 201);
             this.zedGraphControlDownLeft1.Name = "zedGraphControlDownLeft1";
             this.zedGraphControlDownLeft1.ScrollGrace = 0D;
             this.zedGraphControlDownLeft1.ScrollMaxX = 0D;
@@ -318,7 +318,7 @@
             this.zedGraphControlDownLeft1.ScrollMinX = 0D;
             this.zedGraphControlDownLeft1.ScrollMinY = 0D;
             this.zedGraphControlDownLeft1.ScrollMinY2 = 0D;
-            this.zedGraphControlDownLeft1.Size = new System.Drawing.Size(453, 206);
+            this.zedGraphControlDownLeft1.Size = new System.Drawing.Size(374, 192);
             this.zedGraphControlDownLeft1.TabIndex = 9;
             this.zedGraphControlDownLeft1.UseExtendedPrintDialog = true;
             // 
@@ -334,7 +334,7 @@
             this.zedGraphControlUpLeft1.ScrollMinX = 0D;
             this.zedGraphControlUpLeft1.ScrollMinY = 0D;
             this.zedGraphControlUpLeft1.ScrollMinY2 = 0D;
-            this.zedGraphControlUpLeft1.Size = new System.Drawing.Size(453, 205);
+            this.zedGraphControlUpLeft1.Size = new System.Drawing.Size(374, 192);
             this.zedGraphControlUpLeft1.TabIndex = 6;
             this.zedGraphControlUpLeft1.UseExtendedPrintDialog = true;
             // 
@@ -342,7 +342,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1856, 899);
+            this.ClientSize = new System.Drawing.Size(1540, 845);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

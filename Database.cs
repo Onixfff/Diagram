@@ -215,7 +215,7 @@ namespace Diagram
                     _myConnection.Open();
 
                     string createTableQuery = $"CREATE TABLE `diagramrooms`.`{tableName}` (" +
-                                              "`id` INT(255) AUTO_INCREMENT, NOT NULL," +
+                                              "`id` INT(255) AUTO_INCREMENT," +
                                               "`idgraph` INT(5) NOT NULL," +
                                               "`time` DATETIME NOT NULL," +
                                               "`value` INT(5) NOT NULL," +
