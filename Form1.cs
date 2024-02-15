@@ -145,7 +145,7 @@ namespace Diagram
             }
             else
             {
-                LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable() + count, listPoints, Color.Blue, SymbolType.None);
+                LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.None);
 
                 //Подготовка начального вида графики ( начальные точки min max п x и y)
                 DateTime minDateTime = dataGraphs[0].GetDateTime();
