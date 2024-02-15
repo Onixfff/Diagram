@@ -43,7 +43,7 @@ namespace Diagram
             graph30
         };
 
-        private readonly string _databaseName = "diagramrooms";
+        private readonly string _databaseName = "diagramrooms";//заменить название имени бд
         private readonly string _connectString;
         private MySqlConnection _myConnection;
         
