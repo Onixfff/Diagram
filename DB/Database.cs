@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace Diagram
 {
@@ -46,21 +48,27 @@ namespace Diagram
         private readonly string _databaseName = "diagramrooms";//заменить название имени бд
         private readonly string _connectString;
         private MySqlConnection _myConnection;
+        bool isCreate = false;
         
         public Database()
         {
             _connectString = ConfigurationManager.ConnectionStrings["DB"].ConnectionString + "database=" + _databaseName + ";";
-            
-            
+            if(isCreate == false)
+            {
+                CreateDataBase();
+            }
+        }
+
+        private void CreateDataBase()
+        {
             using (_myConnection = new MySqlConnection(_connectString))
             {
                 _myConnection.Close();
             }
 
             CheckDataBase(_connectString);
-            
-            _myConnection.Close();
 
+            _myConnection.Close();
         }
 
         private void CheckDataBase(string connectString)
@@ -202,6 +210,56 @@ namespace Diagram
                     _myConnection.Close();
                 }
                 return isComplite;
+            }
+        }
+
+        public List<Graph> GetId(DateTime dateTime, RoomNames roomNames)
+        {
+            List<Graph> graphs = new List<Graph>();
+            List<DataGraph> copyDataGraphs;
+            List<string> idGraph = new List<string>();
+            List<DataGraph> dataGraphs = new List<DataGraph>();
+            Graph graph;
+
+            string endTime = "23:00:00";
+            string startTime = "00:00:00";
+            string dateEnd = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day} {endTime}";
+            string dateStart = $"{dateTime.Year}-{dateTime.Month}-{dateTime.Day} {startTime}";
+
+
+            using (_myConnection = new MySqlConnection(_connectString))
+            {
+                try
+                {
+                    _myConnection.Open();
+
+                    string sqlCommand = $"SELECT * FROM {_databaseName}.{roomNames} " +
+                                              $"WHERE time >= '{dateStart}'AND time <= '{dateEnd}'";
+
+                    MySqlCommand command = new MySqlCommand(sqlCommand, _myConnection);
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        DataGraph dataGraph = new DataGraph($"graph{(int)reader[1]}", (int)reader[1], (DateTime)reader[2], reader[3].ToString());
+                        dataGraphs.Add(dataGraph);
+                    }
+
+                    copyDataGraphs = dataGraphs.ToList();
+                    graph = new Graph(copyDataGraphs);
+                    graphs.Add(graph);
+                    dataGraphs.Clear();
+                }
+                catch
+                {
+                    MessageBox.Show($"Ошибка при получении начала заготовки");
+                }
+                finally 
+                { 
+                    _myConnection.Close();
+                }
+
+                return graphs;
             }
         }
 

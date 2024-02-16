@@ -6,9 +6,9 @@ using ZedGraph;
 
 namespace Diagram
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-
+        Database _db = new Database();
         private List<Graph> graphs = new List<Graph>();
         List<DataGraph> dataGraphs = new List<DataGraph>();
 
@@ -26,13 +26,12 @@ namespace Diagram
             zedGraphControlDownRight2,
         }
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
-            Database db = new Database();
-            graphs = db.LoadDataDb();
+            graphs = _db.LoadDataDb();
             DrawGraphs(1);
-            db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
+            _db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
         }
 
         private void DrawGraphs(int startIndex)
@@ -206,6 +205,12 @@ namespace Diagram
         private void Button3_Click(object sender, EventArgs e)
         {
             DrawGraphs(21);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SampleDiagram sampleDiagram = new SampleDiagram();
+            sampleDiagram.Show();
         }
     }
 }

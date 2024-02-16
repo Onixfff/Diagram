@@ -1,6 +1,6 @@
 ﻿namespace Diagram
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -48,6 +48,7 @@
             this.zedGraphControlDownRight1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlDownLeft1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlUpLeft1 = new ZedGraph.ZedGraphControl();
+            this.button4 = new System.Windows.Forms.Button();
             this.ButtonsPanel.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelDownMain.SuspendLayout();
@@ -58,13 +59,14 @@
             // ButtonsPanel
             // 
             this.ButtonsPanel.AutoSize = true;
+            this.ButtonsPanel.Controls.Add(this.button4);
             this.ButtonsPanel.Controls.Add(this.radioButton1);
             this.ButtonsPanel.Controls.Add(this.Button2);
             this.ButtonsPanel.Controls.Add(this.Button3);
             this.ButtonsPanel.Controls.Add(this.Button1);
             this.ButtonsPanel.Location = new System.Drawing.Point(3, 3);
             this.ButtonsPanel.Name = "ButtonsPanel";
-            this.ButtonsPanel.Size = new System.Drawing.Size(340, 29);
+            this.ButtonsPanel.Size = new System.Drawing.Size(421, 29);
             this.ButtonsPanel.TabIndex = 6;
             // 
             // radioButton1
@@ -84,7 +86,7 @@
             this.Button2.Name = "Button2";
             this.Button2.Size = new System.Drawing.Size(75, 23);
             this.Button2.TabIndex = 2;
-            this.Button2.Text = "2";
+            this.Button2.Text = "11-20";
             this.Button2.UseVisualStyleBackColor = true;
             this.Button2.Click += new System.EventHandler(this.Button2_Click);
             // 
@@ -94,7 +96,7 @@
             this.Button3.Name = "Button3";
             this.Button3.Size = new System.Drawing.Size(75, 23);
             this.Button3.TabIndex = 3;
-            this.Button3.Text = "3";
+            this.Button3.Text = "21-30";
             this.Button3.UseVisualStyleBackColor = true;
             this.Button3.Click += new System.EventHandler(this.Button3_Click);
             // 
@@ -104,7 +106,7 @@
             this.Button1.Name = "Button1";
             this.Button1.Size = new System.Drawing.Size(75, 23);
             this.Button1.TabIndex = 1;
-            this.Button1.Text = "1";
+            this.Button1.Text = "1-10";
             this.Button1.UseVisualStyleBackColor = true;
             this.Button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -338,6 +340,16 @@
             this.zedGraphControlUpLeft1.TabIndex = 6;
             this.zedGraphControlUpLeft1.UseExtendedPrintDialog = true;
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(343, 3);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Выборка";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,6 +393,7 @@
         private ZedGraph.ZedGraphControl zedGraphControlDownRight1;
         private ZedGraph.ZedGraphControl zedGraphControlDownLeft1;
         private ZedGraph.ZedGraphControl zedGraphControlUpLeft1;
+        private System.Windows.Forms.Button button4;
     }
 }
 
