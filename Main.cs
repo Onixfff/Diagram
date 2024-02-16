@@ -115,8 +115,6 @@ namespace Diagram
             PointPairList errorList = new PointPairList();
 
             // Величина допуска для всех точек
-            double error = 0.1;
-
             if (dataGraphs != null && dataGraphs.Count > 0)
             {
                 valueMax = double.Parse(dataGraphs[0].GetValue());
@@ -139,7 +137,6 @@ namespace Diagram
                 }
                 PointPair pointPair = new PointPair(new XDate(datetime), value);
                 listPoints.Add(pointPair);
-                errorList.Add(value, value - error, value + error);
 
             }
 
@@ -153,7 +150,6 @@ namespace Diagram
             else
             {
                 LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.None);
-                ErrorBarItem errorCurve = pane.AddErrorBar("Error", errorList, Color.Black);
 
                 //Подготовка начального вида графики ( начальные точки min max п x и y)
                 DateTime minDateTime = dataGraphs[0].GetDateTime();
