@@ -111,8 +111,7 @@ namespace Diagram
             //Заполнение таблицы
             dataGraphs = graphs[count].GetDataGraphs();
 
-            // !!! Создадим список допусков
-            PointPairList errorList = new PointPairList();
+            // !!! Создадим список
 
             // Величина допуска для всех точек
             if (dataGraphs != null && dataGraphs.Count > 0)
@@ -137,7 +136,6 @@ namespace Diagram
                 }
                 PointPair pointPair = new PointPair(new XDate(datetime), value);
                 listPoints.Add(pointPair);
-
             }
 
             // Создадим кривую с названием "Название из бд",
