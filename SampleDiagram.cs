@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZedGraph;
 using static Diagram.Database;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace Diagram
 {
@@ -25,6 +26,7 @@ namespace Diagram
             comboBoxRoms.Items.Clear();
             comboBoxRoms.DataSource = Enum.GetValues(typeof(RoomNames));
             ShowFilterDiagram();
+            DrawGraph();
         }
 
         //Выводит время начала заготовки
@@ -39,7 +41,6 @@ namespace Diagram
             _graphs = _db.GetId(dateTime, (RoomNames)Enum.Parse(typeof(RoomNames), comboBoxRoms.SelectedValue.ToString()));
             if (_graphs == null) { return; }
             SetDataComboBox(_graphs);
-            DrawGraph();
         }
 
         private void SetDataComboBox(List<Graph> graphs)
@@ -59,92 +60,59 @@ namespace Diagram
             }
         }
 
-        private double f1(double x)
+        private PointPairList GetPointPairList(string nameDiagram)
         {
-            if (x == 0)
+            PointPairList pointList = new PointPairList();
+            _dataGraphs = _graphs[0].GetDataGraphs();
+            for (int i = 0; i < _dataGraphs.Count; i++)
             {
-                return 1;
+                string name = _dataGraphs[i].GetNameTable();
+                if (name == nameDiagram)
+                {
+                    DateTime datetime = _dataGraphs[i].GetDateTime();
+                    double value = double.Parse(_dataGraphs[i].GetValue());
+                    pointList.Add(new XDate(datetime), value);
+                }
             }
 
-            return Math.Sin(x) / x;
+            return pointList;
         }
 
-        private double f2(double x)
+        private void DrawGraph()
         {
-            return Math.Sin(x / 2) / 2;
-        }
-
-        private void DrawGraph(int count = 1)
-        {
-            int LeftIndent = 10;
-            int RightIndent = 10;
-            int step = 15;
-            double valueMin = double.MinValue;
-            double valueMax = double.MaxValue;
-
             GraphPane pane = zedGraphControlFilter.GraphPane;
             pane.CurveList.Clear();
 
-            pane.XAxis.Title.Text = "Время";
-            pane.YAxis.Title.Text = "Значение";
-
-            //Заполнение таблицы
             _dataGraphs = _graphs[0].GetDataGraphs();
-
-
-
-
-
-
-
-            // Величина допуска для всех точек
-            if (_dataGraphs != null && _dataGraphs.Count > 0)
+            List<string> nameGraphs = new List<string>();
+            nameGraphs.Add(_dataGraphs[0].GetNameTable());
+            for (int i = 0; i < _dataGraphs.Count; i++)
             {
-                valueMax = double.Parse(_dataGraphs[0].GetValue());
-                valueMin = double.Parse(_dataGraphs[0].GetValue());
+                for(int j = 0; j < nameGraphs.Count; j++)
+                {
+                    var name = _dataGraphs[i].GetNameTable();
+                    if (name != nameGraphs[j])
+                    {
+                        nameGraphs.Add(_dataGraphs[i].GetNameTable());
+                    }
+                }
             }
 
-            // Создадим кривую с названием "Название из бд",
-            // которая будет рисоваться голубым цветом (Color.Blue),
-            // Опорные точки выделяться не будут (SymbolType.None)
-            if (_dataGraphs.Count <= 0)
+            List<PointPairList> points = new List<PointPairList>();
+
+            for(int i = 0; i < nameGraphs.Count; i++)
             {
-
+                points.Add(GetPointPairList(nameGraphs[i]));
             }
-            else
+
+            Random random = new Random();
+            for(int i = 0; i <  points.Count / 2; i++)
             {
-                //LineItem myCurve = pane.AddCurve(_dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.None);
-
-                //Подготовка начального вида графики ( начальные точки min max п x и y)
-                DateTime minDateTime = _dataGraphs[0].GetDateTime();
-                DateTime maxDateTime = _dataGraphs[_dataGraphs.Count - 1].GetDateTime();
-
-                //Работа для x изменения визуализации графиков
-
-                XDate minTime = new XDate
-                    (
-                        minDateTime.Year, minDateTime.Month, minDateTime.Day, minDateTime.Hour,
-                        minDateTime.Minute, minDateTime.Minute - LeftIndent
-                    );
-
-                XDate maxTime = new XDate
-                    (
-                        maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, maxDateTime.Hour,
-                        maxDateTime.Minute, maxDateTime.Minute + RightIndent
-                    );
-                pane.XAxis.Scale.Max = maxTime;
-                pane.XAxis.Scale.Min = minTime;
-                pane.XAxis.Type = AxisType.Date;
-                pane.XAxis.Scale.Format = "m:ss";
-                pane.XAxis.Scale.MajorStep = step;
-
-                pane.XAxis.Type = AxisType.Exponent;
-                pane.YAxis.Scale.Max = valueMin + 5;
-                pane.YAxis.Scale.Min = valueMax + 5;
-                pane.YAxis.Scale.MajorStep = 5;
+                Color color = Color.FromArgb(random.Next(255), random.Next(255), random.Next(255));
+                LineItem f1_curve = pane.AddCurve(i.ToString(), points[i], color, SymbolType.None);
             }
+
             zedGraphControlFilter.AxisChange();
-            // Обновляем график
             zedGraphControlFilter.Invalidate();
         }
     }

@@ -32,6 +32,7 @@ namespace Diagram
             graphs = _db.LoadDataDb();
             DrawGraphs(1);
             //_db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
+
         }
 
         private void DrawGraphs(int startIndex)
