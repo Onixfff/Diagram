@@ -31,7 +31,7 @@ namespace Diagram
             InitializeComponent();
             graphs = _db.LoadDataDb();
             DrawGraphs(1);
-            _db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
+            //_db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
         }
 
         private void DrawGraphs(int startIndex)
@@ -166,16 +166,8 @@ namespace Diagram
                         maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, maxDateTime.Hour,
                         maxDateTime.Minute, maxDateTime.Minute + RightIndent
                     );
-                pane.XAxis.Scale.Max = maxTime;
-                pane.XAxis.Scale.Min = minTime;
                 pane.XAxis.Type = AxisType.Date;
                 pane.XAxis.Scale.Format = "m:ss";
-                pane.XAxis.Scale.MajorStep = step;
-
-                //pane.XAxis.Type = AxisType.Exponent;
-                //pane.YAxis.Scale.Max = valueMin + 5;
-                //pane.YAxis.Scale.Min = valueMax + 5;
-                pane.YAxis.Scale.MajorStep = 5;
             }
                 zedGraph.AxisChange();
                 // Обновляем график
