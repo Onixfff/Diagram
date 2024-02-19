@@ -53,7 +53,7 @@ namespace Diagram
             graph38,
         };
 
-        private readonly string _databaseName = "diagramrooms";//заменить название имени бд
+        private readonly string _databaseName = "diagramrooms"; //заменить название имени бд
         private readonly string _connectString;
         private MySqlConnection _myConnection;
         bool isCreate = false;
@@ -283,8 +283,9 @@ namespace Diagram
                     string createTableQuery = $"CREATE TABLE `diagramrooms`.`{tableName}` (" +
                                               "`id` INT(255) AUTO_INCREMENT," +
                                               "`idgraph` INT(5) NOT NULL," +
-                                              "`time` DATETIME NOT NULL," +
-                                              "`value` INT(5) NOT NULL," +
+                                              "`nowTime` DATETIME NOT NULL," +
+                                              "`value` FLOAT(10) NOT NULL," +
+                                              "`time` INT(10) NOT NULL," +
                                               "PRIMARY KEY (`id`)," +
                                               "UNIQUE INDEX `idgraph2222_UNIQUE` (`id` ASC) VISIBLE);";
 
