@@ -33,9 +33,9 @@
             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.comboBoxPreparationStartDates = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.zedGraphControlFilter = new ZedGraph.ZedGraphControl();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,8 +74,17 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 33);
+            this.panel1.Size = new System.Drawing.Size(1728, 33);
             this.panel1.TabIndex = 5;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(577, 5);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(147, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Показать все диаграммы";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -99,24 +108,15 @@
             this.zedGraphControlFilter.ScrollMinX = 0D;
             this.zedGraphControlFilter.ScrollMinY = 0D;
             this.zedGraphControlFilter.ScrollMinY2 = 0D;
-            this.zedGraphControlFilter.Size = new System.Drawing.Size(800, 417);
+            this.zedGraphControlFilter.Size = new System.Drawing.Size(1728, 812);
             this.zedGraphControlFilter.TabIndex = 6;
             this.zedGraphControlFilter.UseExtendedPrintDialog = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(577, 5);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(147, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Показать все диаграммы";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // SampleDiagram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1728, 845);
             this.Controls.Add(this.zedGraphControlFilter);
             this.Controls.Add(this.panel1);
             this.Name = "SampleDiagram";
