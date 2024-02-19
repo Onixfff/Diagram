@@ -140,7 +140,6 @@
     <EmbeddedResource Include="SampleDiagram.resx">
       <DependentUpon>SampleDiagram.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="DB\DB.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

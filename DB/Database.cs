@@ -60,7 +60,7 @@ namespace Diagram
         
         public Database()
         {
-            _connectString = ConfigurationManager.ConnectionStrings["DB"].ConnectionString + "database=" + _databaseName + ";";
+            _connectString = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
             if(isCreate == false)
             {
                 CreateDataBase();
