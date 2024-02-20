@@ -242,7 +242,7 @@ namespace Diagram
                     _myConnection.Open();
 
                     string sqlCommand = $"SELECT * FROM {_databaseName}.{roomNames} " +
-                                              $"WHERE time >= '{dateStart}'AND time <= '{dateEnd}'";
+                                              $"WHERE nowTime >= '{dateStart}'AND nowTime <= '{dateEnd}'";
 
                     MySqlCommand command = new MySqlCommand(sqlCommand, _myConnection);
                     MySqlDataReader reader = command.ExecuteReader();
@@ -303,46 +303,6 @@ namespace Diagram
                     _myConnection.Close();
                 }
                 return isComplite;
-            }
-        }
-
-        public bool SendData(RoomNames room, int idGraph, DateTime time, string value)
-        {
-            using (_myConnection = new MySqlConnection(_connectString))
-            {
-                bool isSendMessage = false;
-                var isState = _myConnection.State;
-                if(isState == System.Data.ConnectionState.Closed)
-                    _myConnection.Open();
-                try
-                {
-                    var sqlDate = time.Date.ToString("yyyy-MM-dd HH:mm:ss");
-                    string sql = $"INSERT INTO `diagramrooms`.`{room}` (`idgraph`, `time`, `value`) VALUES('{idGraph}', '{sqlDate}', '{value}');";
-
-                    MySqlCommand cmd = new MySqlCommand(sql, _myConnection);
-
-                    int rowCount = cmd.ExecuteNonQuery();
-                    Console.WriteLine("Row Count affected = " + rowCount);
-                    if(rowCount > 1)
-                        isSendMessage = true;
-                    else
-                        Console.WriteLine("Row Count affected = " + rowCount);
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show("Error: " + e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    isSendMessage = false;
-                }
-                finally
-                {
-                    _myConnection.Close();
-                    if (isSendMessage)
-                        Console.WriteLine("Сообщение отправлено");
-                    else
-                        Console.WriteLine("Сообщение не доставлено");
-                }
-                return isSendMessage;
             }
         }
     }

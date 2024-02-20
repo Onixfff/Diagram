@@ -6,37 +6,37 @@ namespace Diagram
 {
     public class DataGraph
     {
-        private string _nameTable;
-        private int _idGraph;
-        private DateTime _time;
-        private string _value;
+        private string NameTable;
+        private int IdGraph;
+        private DateTime NowTime;
+        private string Value;
 
         public DataGraph(string nameTable, int idGraph, DateTime time, string value)
         {
-            _nameTable = nameTable;
-            _idGraph = idGraph;
-            _time = time;
-            _value = value;
+            NameTable = nameTable;
+            IdGraph = idGraph;
+            NowTime = time;
+            Value = value;
         }
 
         public string GetNameTable()
         {
-            return _nameTable;
+            return NameTable;
         }
 
         public int GetIdGraph()
         {
-            return _idGraph;
+            return IdGraph;
         }
         
         public DateTime GetDateTime()
         {
-            return _time;
+            return NowTime;
         }
         
         public string GetValue()
         {
-            return _value;
+            return Value;
         }
     }
 }
