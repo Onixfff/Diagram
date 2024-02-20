@@ -143,7 +143,7 @@ namespace Diagram
                         MySqlDataReader reader = command.ExecuteReader();
                         while (reader.Read())
                         {
-                            DataGraph dataGraph = new DataGraph(room, (int)reader[1], (DateTime)reader[2], reader[3].ToString());
+                            DataGraph dataGraph = new DataGraph(room, (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);
                             dataGraphs.Add(dataGraph);
                         }
 
@@ -249,7 +249,7 @@ namespace Diagram
 
                     while (reader.Read())
                     {
-                        DataGraph dataGraph = new DataGraph($"graph{(int)reader[1]}", (int)reader[1], (DateTime)reader[2], reader[3].ToString());
+                        DataGraph dataGraph = new DataGraph($"graph{(int)reader[1]}", (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);
                         dataGraphs.Add(dataGraph);
                     }
 

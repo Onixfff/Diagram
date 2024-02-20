@@ -10,13 +10,15 @@ namespace Diagram
         private int IdGraph;
         private DateTime NowTime;
         private string Value;
+        private int Time;
 
-        public DataGraph(string nameTable, int idGraph, DateTime time, string value)
+        public DataGraph(string nameTable, int idGraph, DateTime nowTime, string value, int time)
         {
             NameTable = nameTable;
             IdGraph = idGraph;
-            NowTime = time;
+            NowTime = nowTime;
             Value = value;
+            Time = time;
         }
 
         public string GetNameTable()
@@ -37,6 +39,11 @@ namespace Diagram
         public string GetValue()
         {
             return Value;
+        }
+
+        public int GetTime()
+        {
+            return Time;
         }
     }
 }

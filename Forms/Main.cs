@@ -95,11 +95,13 @@ namespace Diagram
         private void DrawGraph(ZedGraphControl zedGraph, int count = 1)
         {
             count = --count;
-            int LeftIndent = 10;
-            int RightIndent = 10;
-            int step = 15;
-            double valueMin = double.MinValue;
-            double valueMax = double.MaxValue;
+            double xmin_limit = 0;
+            double xmax_limit = 0;
+
+            double ymin_limit = 0;
+            double ymax_limit = 0;
+
+
 
             GraphPane pane = zedGraph.GraphPane;
             pane.CurveList.Clear();
@@ -114,29 +116,17 @@ namespace Diagram
 
             // !!! Создадим список
 
-            // Величина допуска для всех точек
-            if (dataGraphs != null && dataGraphs.Count > 0)
-            {
-                valueMax = double.Parse(dataGraphs[0].GetValue());
-                valueMin = double.Parse(dataGraphs[0].GetValue());
-            }
-
             for (int j = 0; j < dataGraphs.Count; j++)
             {
-                //double time = Convert.ToDouble(dataGraphs[j].GetDateTime().Second);
-                //dataGraphs[j].get
-                DateTime datetime = dataGraphs[j].GetDateTime();
+                double time = dataGraphs[j].GetTime();
                 double value = double.Parse(dataGraphs[j].GetValue());
-                if(valueMax < value)
-                {
-                    valueMax = value;
-                }
-                if(valueMin > value) 
-                {
-                    valueMin = value;
-                }
-                PointPair pointPair = new PointPair(new XDate(datetime), value);
+
+                PointPair pointPair = new PointPair(time, value);
                 listPoints.Add(pointPair);
+                if(xmax_limit < time)
+                    xmax_limit = time;
+                if(ymax_limit < value)
+                    ymax_limit = value;
             }
 
             // Создадим кривую с названием "Название из бд",
@@ -150,25 +140,12 @@ namespace Diagram
             {
                 LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.None);
 
-                //Подготовка начального вида графики ( начальные точки min max п x и y)
-                DateTime minDateTime = dataGraphs[0].GetDateTime();
-                DateTime maxDateTime = dataGraphs[dataGraphs.Count - 1].GetDateTime();
+                pane.XAxis.Scale.Min = xmin_limit;
+                pane.XAxis.Scale.Max = xmax_limit;
 
-                //Работа для x изменения визуализации графиков
+                pane.YAxis.Scale.Min = ymin_limit;
+                pane.YAxis.Scale.Max = ymax_limit;
 
-                XDate minTime = new XDate
-                    (
-                        minDateTime.Year, minDateTime.Month, minDateTime.Day, minDateTime.Hour,
-                        minDateTime.Minute, minDateTime.Minute - LeftIndent
-                    );
-
-                XDate maxTime = new XDate
-                    (
-                        maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, maxDateTime.Hour,
-                        maxDateTime.Minute, maxDateTime.Minute + RightIndent
-                    );
-                pane.XAxis.Type = AxisType.Date;
-                pane.XAxis.Scale.Format = "m:ss";
             }
                 zedGraph.AxisChange();
                 // Обновляем график
