@@ -85,7 +85,7 @@ namespace Diagram
 
             _dataGraphs = _graphs[0].GetDataGraphs();
             List<string> nameGraphs = new List<string>();
-            nameGraphs.Add(_dataGraphs[0].GetNameTable());
+            //nameGraphs.Add(_dataGraphs[0].GetNameTable());
             for (int i = 0; i < _dataGraphs.Count; i++)
             {
                 for(int j = 0; j < nameGraphs.Count; j++)

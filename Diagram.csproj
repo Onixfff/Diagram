@@ -109,23 +109,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB\Database.cs" />
-    <Compile Include="Main.cs">
+    <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
+    <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGraph.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleDiagram.cs">
+    <Compile Include="Forms\SampleDiagram.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SampleDiagram.Designer.cs">
+    <Compile Include="Forms\SampleDiagram.Designer.cs">
       <DependentUpon>SampleDiagram.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Main.resx">
+    <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -137,7 +137,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SampleDiagram.resx">
+    <EmbeddedResource Include="Forms\SampleDiagram.resx">
       <DependentUpon>SampleDiagram.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
