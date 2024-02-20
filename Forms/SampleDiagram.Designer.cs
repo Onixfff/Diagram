@@ -61,6 +61,7 @@
             this.comboBoxPreparationStartDates.Name = "comboBoxPreparationStartDates";
             this.comboBoxPreparationStartDates.Size = new System.Drawing.Size(146, 21);
             this.comboBoxPreparationStartDates.TabIndex = 4;
+            this.comboBoxPreparationStartDates.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreparationStartDates_SelectedIndexChanged);
             // 
             // panel1
             // 

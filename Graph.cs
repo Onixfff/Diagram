@@ -40,18 +40,19 @@ namespace Diagram
             return count;
         }
 
-        public List<DateTime> GetPreparationStartDates()
+        public List<DataGraph> GetPreparationStartDates()
         {
-            List<DateTime> dates = new List<DateTime>();
+            List<DataGraph> dates = new List<DataGraph>();
             int index = 0;
 
-            for(int i = 0; i < _dataGraphs.Count; ++i)
+            for (int i = 0; i < _dataGraphs.Count; ++i)
             {
                 int value = _dataGraphs[i].GetIdGraph();
                 if (index != value)
                 {
                     index = value;
-                    dates.Add(_dataGraphs[i].GetDateTime());
+
+                    dates.Add(new DataGraph(_dataGraphs[i].GetNameTable(), _dataGraphs[i].GetIdGraph(), _dataGraphs[i].GetDateTime(), _dataGraphs[i].GetValue(), _dataGraphs[i].GetTime()));
                 }
             }
 

@@ -249,7 +249,7 @@ namespace Diagram
 
                     while (reader.Read())
                     {
-                        DataGraph dataGraph = new DataGraph($"graph{(int)reader[1]}", (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);
+                        DataGraph dataGraph = new DataGraph($"{roomNames}", (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);
                         dataGraphs.Add(dataGraph);
                     }
 
@@ -269,6 +269,40 @@ namespace Diagram
 
                 return graphs;
             }
+        }
+
+        public List<DataGraph> GetDiagram(RoomNames room, int diagramId) 
+        {
+            List<Graph> graphs = new List<Graph>();
+            List<DataGraph> dataGraphs = new List<DataGraph>();
+            List<DataGraph> copyDataGraphs;
+
+            using (_myConnection = new MySqlConnection(_connectString))
+            {
+                try
+                {
+                    _myConnection.Open();
+                    string sql =
+                        $"SELECT * FROM {_databaseName}.{room} where idgraph = {diagramId}";
+                    MySqlCommand command = new MySqlCommand(sql, _myConnection);
+                    MySqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        DataGraph dataGraph = new DataGraph(room.ToString(), (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);
+                        dataGraphs.Add(dataGraph);
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
+                finally { _myConnection.Close(); }
+            }
+
+            return dataGraphs;
         }
 
         private bool CreateTable(string tableName)

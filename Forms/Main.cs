@@ -101,8 +101,6 @@ namespace Diagram
             double ymin_limit = 0;
             double ymax_limit = 0;
 
-
-
             GraphPane pane = zedGraph.GraphPane;
             pane.CurveList.Clear();
 
