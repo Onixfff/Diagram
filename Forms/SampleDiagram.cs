@@ -21,6 +21,8 @@ namespace Diagram
         double ymin_limit = 0;
         double ymax_limit = 0;
 
+        double step = 10;
+
         string textTime = "Время";
         string textValue = "Значение";
 
@@ -51,6 +53,7 @@ namespace Diagram
         {
             comboBoxPreparationStartDates.DataSource = null;
             comboBoxPreparationStartDates.Items.Clear();
+            comboBoxPreparationStartDates.Text = "";
 
             for(int i = 0; i < graphs.Count; i++)
             {
@@ -128,7 +131,7 @@ namespace Diagram
             pane.XAxis.Scale.Max = xmax_limit;
 
             pane.YAxis.Scale.Min = ymin_limit;
-            pane.YAxis.Scale.Max = ymax_limit;
+            pane.YAxis.Scale.Max = ymax_limit + step;
 
             LineItem f1_curve = pane.AddCurve(dataGraphs[0].GetNameTable(), list , Color.Black, SymbolType.None);
 

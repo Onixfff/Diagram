@@ -33,7 +33,6 @@
             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.comboBoxPreparationStartDates = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.zedGraphControlFilter = new ZedGraph.ZedGraphControl();
             this.panel1.SuspendLayout();
@@ -67,7 +66,6 @@
             // 
             this.panel1.AutoSize = true;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.dateTimePicker);
             this.panel1.Controls.Add(this.comboBoxPreparationStartDates);
@@ -77,15 +75,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1728, 33);
             this.panel1.TabIndex = 5;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(577, 5);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(147, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Показать все диаграммы";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -137,6 +126,5 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
         private ZedGraph.ZedGraphControl zedGraphControlFilter;
-        private System.Windows.Forms.Button button2;
     }
 }

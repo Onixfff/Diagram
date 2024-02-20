@@ -101,6 +101,8 @@ namespace Diagram
             double ymin_limit = 0;
             double ymax_limit = 0;
 
+            double step = 10;
+
             GraphPane pane = zedGraph.GraphPane;
             pane.CurveList.Clear();
 
@@ -136,13 +138,13 @@ namespace Diagram
             }
             else
             {
-                LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.None);
+                LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.Diamond);
 
                 pane.XAxis.Scale.Min = xmin_limit;
                 pane.XAxis.Scale.Max = xmax_limit;
 
                 pane.YAxis.Scale.Min = ymin_limit;
-                pane.YAxis.Scale.Max = ymax_limit;
+                pane.YAxis.Scale.Max = ymax_limit + step;
 
             }
                 zedGraph.AxisChange();
