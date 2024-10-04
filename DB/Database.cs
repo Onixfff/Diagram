@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Diagram
@@ -116,7 +117,7 @@ namespace Diagram
             }
         }
         
-        public List<Graph> LoadDataDb()
+        public async Task<List<Graph>> LoadDataDb()
         {
             List<Graph> graphs = new List<Graph>();
             List<DataGraph> dataGraphs = new List<DataGraph>();
@@ -131,14 +132,17 @@ namespace Diagram
                 {
                     try
                     {
-                        _myConnection.Open();
+                        await _myConnection.OpenAsync();
+                        
                         string sql =
                             $"SELECT * FROM {_databaseName}.{room} " +
                             $"where idgraph = " +
                             $"(SELECT idgraph FROM {_databaseName}.{room} " +
                             $"order by idgraph desc limit 1);";
+                        
                         MySqlCommand command = new MySqlCommand(sql, _myConnection);
-                        MySqlDataReader reader = command.ExecuteReader();
+                        var reader = await command.ExecuteReaderAsync();
+                        
                         while (reader.Read())
                         {
                             DataGraph dataGraph = new DataGraph(room, (int)reader[1], (DateTime)reader[2], reader[3].ToString(), (int)reader[4]);

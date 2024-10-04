@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZedGraph;
 
@@ -29,10 +30,8 @@ namespace Diagram
         public Main()
         {
             InitializeComponent();
-            graphs = _db.LoadDataDb();
+            Task.Run(async () => graphs = await _db.LoadDataDb()).GetAwaiter().GetResult();
             DrawGraphs(1);
-            //_db.SendData(Database.RoomNames.graph2, 3, DateTime.Now, "12");
-
         }
 
         private void DrawGraphs(int startIndex)
@@ -87,6 +86,12 @@ namespace Diagram
                     break;
             }
         }
+
+        private void GetListGraph()
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -150,6 +155,11 @@ namespace Diagram
                 zedGraph.AxisChange();
                 // Обновляем график
                 zedGraph.Invalidate();
+        }
+
+        private void SwitchGraph(ZedGraphControl left, ZedGraphControl right)
+        {
+
         }
 
         private List<Graph> UpdateDataGraphs(List<Graph> baseGraphs, float timer = 20, bool isUpdate = true)
