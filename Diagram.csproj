@@ -119,6 +119,7 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGraph.cs" />
+    <Compile Include="Forms\ZedGraphPosition.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
