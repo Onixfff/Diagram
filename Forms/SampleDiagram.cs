@@ -154,51 +154,5 @@ namespace Diagram
                 }
             }
         }
-
-        //private void DrawGraphs()
-        //{
-        //    GraphPane pane = zedGraphControlFilter.GraphPane;
-        //    pane.CurveList.Clear();
-
-        //    pane.XAxis.Title.Text = textTime;
-        //    pane.YAxis.Title.Text = textValue;
-
-        //    _dataGraphs = _graphs[0].GetDataGraphs();
-
-        //    for (int i = 0; i < _dataGraphs.Count; i++)
-        //    {
-        //        var time = _dataGraphs[i].GetTime();
-        //        var value = Convert.ToDouble(_dataGraphs[i].GetValue());
-
-        //        if (xmax_limit < time)
-        //            xmax_limit = time;
-
-        //        if (ymax_limit < value)
-        //            ymax_limit = value;
-        //    }
-
-        //    List<PointPairList> points = new List<PointPairList>();
-
-        //    for(int i = 0; i < nameGraphs.Count; i++)
-        //    {
-        //        points.Add(GetPointPairList(nameGraphs[i]));
-        //    }
-
-        //    pane.XAxis.Scale.Min = xmin_limit;
-        //    pane.XAxis.Scale.Max = xmax_limit;
-
-        //    pane.YAxis.Scale.Min = ymin_limit;
-        //    pane.YAxis.Scale.Max = ymax_limit;
-
-        //    Random random = new Random();
-        //    for(int i = 0; i <  points.Count / 2; i++)
-        //    {
-        //        Color color = Color.FromArgb(random.Next(255), random.Next(255), random.Next(255));
-        //        LineItem f1_curve = pane.AddCurve(i.ToString(), points[i], color, SymbolType.None);
-        //    }
-
-        //    zedGraphControlFilter.AxisChange();
-        //    zedGraphControlFilter.Invalidate();
-        //}
     }
 }

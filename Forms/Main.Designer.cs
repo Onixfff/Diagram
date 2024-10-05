@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.ButtonsPanel = new System.Windows.Forms.Panel();
             this.button4 = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.Button2 = new System.Windows.Forms.Button();
             this.Button3 = new System.Windows.Forms.Button();
             this.Button1 = new System.Windows.Forms.Button();
@@ -49,6 +48,7 @@
             this.zedGraphControlDownRight1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlDownLeft1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlUpLeft1 = new ZedGraph.ZedGraphControl();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.ButtonsPanel.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelDownMain.SuspendLayout();
@@ -59,36 +59,25 @@
             // ButtonsPanel
             // 
             this.ButtonsPanel.AutoSize = true;
+            this.ButtonsPanel.Controls.Add(this.checkBox1);
             this.ButtonsPanel.Controls.Add(this.button4);
-            this.ButtonsPanel.Controls.Add(this.radioButton1);
             this.ButtonsPanel.Controls.Add(this.Button2);
             this.ButtonsPanel.Controls.Add(this.Button3);
             this.ButtonsPanel.Controls.Add(this.Button1);
             this.ButtonsPanel.Location = new System.Drawing.Point(3, 3);
             this.ButtonsPanel.Name = "ButtonsPanel";
-            this.ButtonsPanel.Size = new System.Drawing.Size(421, 29);
+            this.ButtonsPanel.Size = new System.Drawing.Size(413, 29);
             this.ButtonsPanel.TabIndex = 6;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(343, 3);
+            this.button4.Location = new System.Drawing.Point(335, 3);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 5;
             this.button4.Text = "Выборка";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(246, 6);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(91, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Переставить";
-            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // Button2
             // 
@@ -168,6 +157,7 @@
             this.zedGraphControlMainDown.Size = new System.Drawing.Size(939, 477);
             this.zedGraphControlMainDown.TabIndex = 10;
             this.zedGraphControlMainDown.UseExtendedPrintDialog = true;
+            this.zedGraphControlMainDown.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlMainUp
             // 
@@ -184,6 +174,7 @@
             this.zedGraphControlMainUp.Size = new System.Drawing.Size(939, 476);
             this.zedGraphControlMainUp.TabIndex = 5;
             this.zedGraphControlMainUp.UseExtendedPrintDialog = true;
+            this.zedGraphControlMainUp.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // tableLayoutPanelDownRight
             // 
@@ -218,6 +209,7 @@
             this.zedGraphControlDownRight2.Size = new System.Drawing.Size(464, 233);
             this.zedGraphControlDownRight2.TabIndex = 6;
             this.zedGraphControlDownRight2.UseExtendedPrintDialog = true;
+            this.zedGraphControlDownRight2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlUpRight2
             // 
@@ -234,6 +226,7 @@
             this.zedGraphControlUpRight2.Size = new System.Drawing.Size(464, 232);
             this.zedGraphControlUpRight2.TabIndex = 7;
             this.zedGraphControlUpRight2.UseExtendedPrintDialog = true;
+            this.zedGraphControlUpRight2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlUpLeft2
             // 
@@ -250,6 +243,7 @@
             this.zedGraphControlUpLeft2.Size = new System.Drawing.Size(463, 232);
             this.zedGraphControlUpLeft2.TabIndex = 8;
             this.zedGraphControlUpLeft2.UseExtendedPrintDialog = true;
+            this.zedGraphControlUpLeft2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlDownLeft2
             // 
@@ -266,6 +260,7 @@
             this.zedGraphControlDownLeft2.Size = new System.Drawing.Size(463, 233);
             this.zedGraphControlDownLeft2.TabIndex = 9;
             this.zedGraphControlDownLeft2.UseExtendedPrintDialog = true;
+            this.zedGraphControlDownLeft2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // tableLayoutPanel1
             // 
@@ -301,6 +296,7 @@
             this.zedGraphControlUpRight1.Size = new System.Drawing.Size(464, 232);
             this.zedGraphControlUpRight1.TabIndex = 8;
             this.zedGraphControlUpRight1.UseExtendedPrintDialog = true;
+            this.zedGraphControlUpRight1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlDownRight1
             // 
@@ -317,6 +313,7 @@
             this.zedGraphControlDownRight1.Size = new System.Drawing.Size(464, 232);
             this.zedGraphControlDownRight1.TabIndex = 7;
             this.zedGraphControlDownRight1.UseExtendedPrintDialog = true;
+            this.zedGraphControlDownRight1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlDownLeft1
             // 
@@ -333,6 +330,7 @@
             this.zedGraphControlDownLeft1.Size = new System.Drawing.Size(463, 232);
             this.zedGraphControlDownLeft1.TabIndex = 9;
             this.zedGraphControlDownLeft1.UseExtendedPrintDialog = true;
+            this.zedGraphControlDownLeft1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
             // zedGraphControlUpLeft1
             // 
@@ -349,6 +347,18 @@
             this.zedGraphControlUpLeft1.Size = new System.Drawing.Size(463, 232);
             this.zedGraphControlUpLeft1.TabIndex = 6;
             this.zedGraphControlUpLeft1.UseExtendedPrintDialog = true;
+            this.zedGraphControlUpLeft1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(246, 7);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(92, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "Переставить";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Main
             // 
@@ -382,7 +392,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDownMain;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDownRight;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.RadioButton radioButton1;
         private ZedGraph.ZedGraphControl zedGraphControlMainDown;
         private ZedGraph.ZedGraphControl zedGraphControlMainUp;
         private ZedGraph.ZedGraphControl zedGraphControlDownRight2;
@@ -394,6 +403,7 @@
         private ZedGraph.ZedGraphControl zedGraphControlDownLeft1;
         private ZedGraph.ZedGraphControl zedGraphControlUpLeft1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,8 +12,12 @@ namespace Diagram
     public partial class Main : Form
     {
         Database _db = new Database();
-        private List<Graph> graphs = new List<Graph>();
         List<DataGraph> dataGraphs = new List<DataGraph>();
+
+        private List<Graph> graphs = new List<Graph>();
+        private Dictionary<ZedGraphControl, int> _position = new Dictionary<ZedGraphControl, int>();
+        private int count = 0;
+        private List<ZedGraphControl> zedGraphList = new List<ZedGraphControl>();
 
         private enum DiagramName
         {
@@ -37,58 +43,129 @@ namespace Diagram
         private void DrawGraphs(int startIndex)
         {
             startIndex = --startIndex;
+            _position.Clear();
+
             switch (startIndex)
             {
                 case 0:
-                    DrawGraph(zedGraphControlMainUp, 1);
-                    DrawGraph(zedGraphControlMainDown, 2);
+                    _position.Add(zedGraphControlMainUp, 1);
+                    _position.Add(zedGraphControlMainDown, 2);
 
-                    DrawGraph(zedGraphControlUpLeft1, 3);
-                    DrawGraph(zedGraphControlUpRight1, 4);
-                    DrawGraph(zedGraphControlDownLeft1, 5);
-                    DrawGraph(zedGraphControlDownRight1, 6);
+                    _position.Add(zedGraphControlUpLeft1, 3);
+                    _position.Add(zedGraphControlUpRight1, 4);
+                    _position.Add(zedGraphControlDownLeft1, 5);
+                    _position.Add(zedGraphControlDownRight1, 6);
 
-                    DrawGraph(zedGraphControlUpLeft2, 7);
-                    DrawGraph(zedGraphControlUpRight2, 8);
-                    DrawGraph(zedGraphControlDownLeft2, 9);
-                    DrawGraph(zedGraphControlDownRight2, 10);
+                    _position.Add(zedGraphControlUpLeft2, 7);
+                    _position.Add(zedGraphControlUpRight2, 8);
+                    _position.Add(zedGraphControlDownLeft2, 9);
+                    _position.Add(zedGraphControlDownRight2, 10);
+
                     break;
                 case 10:
-                    DrawGraph(zedGraphControlMainUp, 11);
-                    DrawGraph(zedGraphControlMainDown, 12);
+                    _position.Add(zedGraphControlMainUp, 11);
+                    _position.Add(zedGraphControlMainDown, 12);
 
-                    DrawGraph(zedGraphControlUpLeft1, 13);
-                    DrawGraph(zedGraphControlUpRight1, 14);
-                    DrawGraph(zedGraphControlDownLeft1, 15);
-                    DrawGraph(zedGraphControlDownRight1, 16);
+                    _position.Add(zedGraphControlUpLeft1, 13);
+                    _position.Add(zedGraphControlUpRight1, 14);
+                    _position.Add(zedGraphControlDownLeft1, 15);
+                    _position.Add(zedGraphControlDownRight1, 16);
 
-                    DrawGraph(zedGraphControlUpLeft2, 17);
-                    DrawGraph(zedGraphControlUpRight2, 18);
-                    DrawGraph(zedGraphControlDownLeft2, 19);
-                    DrawGraph(zedGraphControlDownRight2, 20);
+                    _position.Add(zedGraphControlUpLeft2, 17);
+                    _position.Add(zedGraphControlUpRight2, 18);
+                    _position.Add(zedGraphControlDownLeft2, 19);
+                    _position.Add(zedGraphControlDownRight2, 20);
+
                     break;
                 case 20:
-                    DrawGraph(zedGraphControlMainUp, 21);
-                    DrawGraph(zedGraphControlMainDown, 22);
+                    _position.Add(zedGraphControlMainUp, 21);
+                    _position.Add(zedGraphControlMainDown, 22);
 
-                    DrawGraph(zedGraphControlUpLeft1, 23);
-                    DrawGraph(zedGraphControlUpRight1, 24);
-                    DrawGraph(zedGraphControlDownLeft1, 25);
-                    DrawGraph(zedGraphControlDownRight1, 26);
+                    _position.Add(zedGraphControlUpLeft1, 23);
+                    _position.Add(zedGraphControlUpRight1, 24);
+                    _position.Add(zedGraphControlDownLeft1, 25);
+                    _position.Add(zedGraphControlDownRight1, 26);
 
-                    DrawGraph(zedGraphControlUpLeft2, 27);
-                    DrawGraph(zedGraphControlUpRight2, 28);
-                    DrawGraph(zedGraphControlDownLeft2, 29);
-                    DrawGraph(zedGraphControlDownRight2, 30);
+                    _position.Add(zedGraphControlUpLeft2, 27);
+                    _position.Add(zedGraphControlUpRight2, 28);
+                    _position.Add(zedGraphControlDownLeft2, 29);
+                    _position.Add(zedGraphControlDownRight2, 30);
+
                     break;
                 default:
                     MessageBox.Show("Неправельно задали значения стартовое значение для вывода диаграм");
                     break;
             }
+
+            foreach (var item in _position)
+            {
+                DrawGraph(item.Key, item.Value);
+            }
         }
 
-        private void GetListGraph()
+        private void SwitchZedGraphControlPosition(ZedGraphControl left, ZedGraphControl right)
         {
+            // Список для новых ключей
+            var newKeys = new List<ZedGraphControl>();
+            Dictionary<ZedGraphControl, int> oldPosition = new Dictionary<ZedGraphControl, int>();
+
+            // Создаем новый словарь для замены
+            var newPosition = new Dictionary<ZedGraphControl, int>();
+            int count = 0;
+            // Заполняем новый словарь, заменяя ключи
+
+            foreach (var pos in _position)
+            {
+                newPosition.Add(pos.Key, pos.Value);
+            }
+
+            ZedGraphControl zedGraphControl1 = null;
+            int pos1 = 0;
+
+            ZedGraphControl zedGraphControl2 = null;
+            int pos2 = 0;
+
+            foreach (var pos in _position)
+            {
+                foreach (var old in oldPosition)
+                {
+                    if(pos.Value == old.Value)
+                    {
+                        count++;
+                        
+                        if (count == 1)
+                        {
+                            zedGraphControl1 = pos.Key;
+                            pos1 = pos.Value;
+                        }
+                        else if (count == 2)
+                        {
+                            zedGraphControl2 = pos.Key;
+                            pos2 = pos.Value;
+                        }
+                    }
+                }
+            }
+
+            foreach (var newpos in newPosition)
+            {
+                if(newpos.Key == zedGraphControl1)
+                {
+                    
+                }
+                else if(newpos.Key == zedGraphControl2)
+                {
+
+                }
+            }
+
+            // Заменяем старый словарь на новый
+            _position = newPosition;
+
+            foreach (var item in _position)
+            {
+                DrawGraph(item.Key, item.Value);
+            }
 
         }
 
@@ -113,6 +190,8 @@ namespace Diagram
 
             PointPairList listPoints = new PointPairList();
 
+            pane.Title.Text = zedGraph.Name;
+
             pane.XAxis.Title.Text = "Время";
             pane.YAxis.Title.Text = "Значение";
 
@@ -128,6 +207,7 @@ namespace Diagram
 
                 PointPair pointPair = new PointPair(time, value);
                 listPoints.Add(pointPair);
+
                 if(xmax_limit < time)
                     xmax_limit = time;
                 if(ymax_limit < value)
@@ -155,11 +235,6 @@ namespace Diagram
                 zedGraph.AxisChange();
                 // Обновляем график
                 zedGraph.Invalidate();
-        }
-
-        private void SwitchGraph(ZedGraphControl left, ZedGraphControl right)
-        {
-
         }
 
         private List<Graph> UpdateDataGraphs(List<Graph> baseGraphs, float timer = 20, bool isUpdate = true)
@@ -194,6 +269,26 @@ namespace Diagram
         {
             SampleDiagram sampleDiagram = new SampleDiagram();
             sampleDiagram.Show();
+        }
+
+        private void zedGraphControlMainUp_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                zedGraphList.Add((ZedGraphControl)sender);
+                
+                if(zedGraphList.Count == 2)
+                {
+                    SwitchZedGraphControlPosition(zedGraphList[0], zedGraphList[1]);
+                    zedGraphList.Clear();
+                }
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBox1.Checked)
+                zedGraphList.Clear();
         }
     }
 }

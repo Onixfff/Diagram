@@ -184,15 +184,21 @@ namespace Diagram
         {
             using (_myConnection = new MySqlConnection(_connectString))
             {
-                _myConnection.Open();
-
-                string checkTableQuery = $"SHOW TABLES LIKE '{tableName}'";
-                MySqlCommand command = new MySqlCommand(checkTableQuery, _myConnection);
-
-                using (var reader = command.ExecuteReader())
+                try
                 {
-                    return reader.HasRows;
+                    _myConnection.Open();
+                    string checkTableQuery = $"SHOW TABLES LIKE '{tableName}'";
+                    MySqlCommand command = new MySqlCommand(checkTableQuery, _myConnection);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        return reader.HasRows;
+                    }
                 }
+                catch (Exception ex) { }
+                finally { _myConnection.Close();}
+
+                return false;
             }
         }
 
