@@ -4,6 +4,14 @@ using ZedGraph;
 
 namespace Diagram
 {
+    public class ZedGraphPositionDto
+    {
+        public string ControlName { get; set; }
+        public int Position { get; set; }
+        public string Name { get; set; }
+    }
+
+
     public class ZedGraphPosition
     {
         public ZedGraphControl Control { get; private set; }
@@ -82,6 +90,36 @@ namespace Diagram
             }
 
             return zedGraphCopy.zedGraphPosition;
+        }
+
+        public static List<ZedGraphPosition> FromDtoList(List<ZedGraphPositionDto> dtoList, List<ZedGraphControl> availableControls)
+        {
+            var result = new List<ZedGraphPosition>();
+
+            foreach (var dto in dtoList)
+            {
+                // Поиск ZedGraphControl по имени
+                var control = availableControls.Find(c => c.Name == dto.ControlName);
+
+                if (control != null)
+                {
+                    // Создаем ZedGraphPosition на основе найденного Control
+                    var resultCreate = Create(control, dto.Position, dto.Name);
+
+                    if(resultCreate.error != null)
+                    {
+                        new ArgumentException(resultCreate.error);
+                    }
+
+                    result.Add(resultCreate.zedGraphPosition);
+                }
+                else
+                {
+                    throw new Exception($"Control with name {dto.ControlName} not found");
+                }
+            }
+
+            return result;
         }
     }
 }

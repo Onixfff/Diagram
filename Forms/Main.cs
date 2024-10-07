@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZedGraph;
@@ -61,12 +63,22 @@ namespace Diagram
             {
                 case 0:
                     CreateListZedGraphPositions(1);
+                    
+                    var result = TakeGraphPositionInJsonFile();
+
+                    if(result.error != null)
+                    {
+                        new ArgumentException(result.error);
+                    }
+
                     break;
                 case 10:
                     CreateListZedGraphPositions(11);
+                    TakeGraphPositionInJsonFile();
                     break;
                 case 20:
                     CreateListZedGraphPositions(21);
+                    TakeGraphPositionInJsonFile();
                     break;
                 default:
                     MessageBox.Show("Неправельно задали стартовое значение для вывода диаграм");
@@ -77,6 +89,33 @@ namespace Diagram
             {
                 DrawGraph(item, item.Position);
             }
+        }
+
+        private (List<ZedGraphPosition> position, string error) TakeGraphPositionInJsonFile()
+        {
+            string json = File.ReadAllText("UserSettings.json");
+
+            var graphPositions = JsonConvert.DeserializeObject<List<ZedGraphPosition>>(json);
+
+            if(graphPositions != null)
+            {
+                foreach (var pos in graphPositions)
+                {
+                    if(pos.Control != null && pos.Position != 0 && string.IsNullOrWhiteSpace(pos.Name))
+                    {
+                        return (graphPositions, null);
+                    }
+                }
+
+                return (null, "Данные не могут быть null");
+            }
+
+            return (null, "graphPositions can't null argument");
+        }
+
+        private void CreateNewGraphPosition()
+        {
+            CreateListZedGraphPositions(1);
         }
 
         private void CreateListZedGraphPositions(int start)
@@ -244,5 +283,6 @@ namespace Diagram
             if (!checkBox1.Checked)
                 ClearZedGrahpList();
         }
+
     }
 }
