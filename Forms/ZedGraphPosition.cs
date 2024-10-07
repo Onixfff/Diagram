@@ -11,7 +11,6 @@ namespace Diagram
         public string Name { get; set; }
     }
 
-
     public class ZedGraphPosition
     {
         public ZedGraphControl Control { get; private set; }

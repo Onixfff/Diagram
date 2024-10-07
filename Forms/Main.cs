@@ -63,7 +63,6 @@ namespace Diagram
             {
                 case 0:
                     CreateListZedGraphPositions(1);
-                    
                     var result = TakeGraphPositionInJsonFile();
 
                     if(result.error != null)
@@ -71,13 +70,14 @@ namespace Diagram
                         new ArgumentException(result.error);
                     }
 
+                    _graphPositions = result.position;
+
+
                     break;
                 case 10:
-                    CreateListZedGraphPositions(11);
                     TakeGraphPositionInJsonFile();
                     break;
                 case 20:
-                    CreateListZedGraphPositions(21);
                     TakeGraphPositionInJsonFile();
                     break;
                 default:
@@ -95,9 +95,18 @@ namespace Diagram
         {
             string json = File.ReadAllText("UserSettings.json");
 
-            var graphPositions = JsonConvert.DeserializeObject<List<ZedGraphPosition>>(json);
+            List<ZedGraphPositionDto> dtoList = JsonConvert.DeserializeObject<List<ZedGraphPositionDto>>(json);
 
-            if(graphPositions != null)
+            var resultGetListZedGraphControls = GetListZedGraphControls();
+
+            if(resultGetListZedGraphControls.error != null)
+            {
+                new ArgumentException(resultGetListZedGraphControls.error);
+            }
+
+            List<ZedGraphPosition> graphPositions = ZedGraphPosition.FromDtoList(dtoList, resultGetListZedGraphControls.zedGraphControls);
+
+            if (graphPositions != null)
             {
                 foreach (var pos in graphPositions)
                 {
@@ -282,6 +291,41 @@ namespace Diagram
         {
             if (!checkBox1.Checked)
                 ClearZedGrahpList();
+        }
+
+        private (List<ZedGraphControl> zedGraphControls, string error) GetListZedGraphControls()
+        {
+            var zedGraphControls = new List<ZedGraphControl>();
+
+            foreach (Control control in GetAllControls(this))
+            {
+                // Проверяем, является ли control экземпляром ZedGraphControl
+                if (control is ZedGraphControl zedGraphControl)
+                {
+                    // Если да, добавляем его в список
+                    zedGraphControls.Add(zedGraphControl);
+                }
+            }
+
+            if (zedGraphControls != null && zedGraphControls.Count > 0)
+                return (zedGraphControls, null);
+            else
+                return (null, "Cannot create zedGraphControls List");
+        }
+
+        // Рекурсивный метод для получения всех контролов на форме
+        private IEnumerable<Control> GetAllControls(Control parent)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                yield return control;
+
+                // Если у контрола есть дочерние элементы, рекурсивно обходим их
+                foreach (Control child in GetAllControls(control))
+                {
+                    yield return child;
+                }
+            }
         }
 
     }
