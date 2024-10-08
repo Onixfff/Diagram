@@ -226,8 +226,44 @@ namespace Diagram
 
         private void UpdateJsonFile(List<ZedGraphPositionDto> dtos)
         {
-            string json = JsonConvert.SerializeObject(dtos, Formatting.Indented);
+
+            string json = File.ReadAllText("UserSettings.json");
+
+            List<ZedGraphPositionDtoData> dtoListData = JsonConvert.DeserializeObject<List<ZedGraphPositionDtoData>>(json);
+
+            List<ZedGraphPositionDto> dtoList = new List<ZedGraphPositionDto>();
+
+            int count = 0;
+
+            foreach (var temp in dtoListData)
+            {
+                var result = ZedGraphPositionDto.Create(temp.Id, temp.ControlName, temp.Position, temp.Name);
+
+                if (result.error != null)
+                {
+                    Console.WriteLine($"Ошибка создания ZedGraphPositionDto: {result.error}");
+                    new Exception(result.error);
+                }
+
+                dtoList.Add(result.zedGraphPositionDto);
+            }
+
+            foreach (var item in dtoList)
+            {
+                var result = dtos.Find(p => p.Id == item.Id);
+
+                if(result != null)
+                {
+                    item.ChangeDto(result.Position, result.Name);
+                }
+            }
+
+            json = JsonConvert.SerializeObject(dtoList, Formatting.Indented);
+
             File.WriteAllText("UserSettings.json", json);
+
+
+
         }
 
         //HACK Переделать выход данных очень плохо всё
@@ -243,8 +279,6 @@ namespace Diagram
                 {
                     js.ChangeDto(existingPosition.Position, existingPosition.Name);
                 }
-
-
             }
 
             if (isComplite == true)
