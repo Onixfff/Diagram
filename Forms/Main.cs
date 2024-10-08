@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MySqlX.XDevAPI.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,6 +19,7 @@ namespace Diagram
         private List<Graph> graphs = new List<Graph>();
         private ZedGraphControl[] _arrayZedGraphControlSwitch = new ZedGraphControl[2];
         private List<ZedGraphPosition> _graphPositions = new List<ZedGraphPosition>();
+        private List<ZedGraphPositionDto> _userSettingsDto;
 
         private enum DiagramName
         {
@@ -59,26 +61,46 @@ namespace Diagram
             startIndex = --startIndex;
             _graphPositions.Clear();
 
+            (List<ZedGraphPosition> position, string error) result = (null, null);
+
             switch (startIndex)
             {
                 case 0:
-                    CreateListZedGraphPositions(1);
-                    var result = TakeGraphPositionInJsonFile();
 
-                    if(result.error != null)
+                    result = TakeGraphPositionInJsonFile(0);
+
+                    if (result.error != null)
                     {
                         new ArgumentException(result.error);
                     }
 
                     _graphPositions = result.position;
 
-
                     break;
                 case 10:
-                    TakeGraphPositionInJsonFile();
+
+                    result = TakeGraphPositionInJsonFile(10);
+
+                    if (result.error != null)
+                    {
+                        new ArgumentException(result.error);
+                    }
+
+                    _graphPositions = result.position;
+
                     break;
                 case 20:
-                    TakeGraphPositionInJsonFile();
+
+                    result = TakeGraphPositionInJsonFile(20);
+
+
+                    if (result.error != null)
+                    {
+                        new ArgumentException(result.error);
+                    }
+
+                    _graphPositions = result.position;
+
                     break;
                 default:
                     MessageBox.Show("Неправельно задали стартовое значение для вывода диаграм");
@@ -91,35 +113,145 @@ namespace Diagram
             }
         }
 
-        private (List<ZedGraphPosition> position, string error) TakeGraphPositionInJsonFile()
+        private (List<ZedGraphPosition> position, string error) TakeGraphPositionInJsonFile(int startIndex)
         {
             string json = File.ReadAllText("UserSettings.json");
 
-            List<ZedGraphPositionDto> dtoList = JsonConvert.DeserializeObject<List<ZedGraphPositionDto>>(json);
+            List<ZedGraphPositionDtoData> dtoListData = JsonConvert.DeserializeObject<List<ZedGraphPositionDtoData>>(json);
+
+            List<ZedGraphPositionDto> dtoList = new List<ZedGraphPositionDto>();
+
+            int count = 0;
+
+            foreach (var temp in dtoListData)
+            {
+                var result = ZedGraphPositionDto.Create(temp.Id, temp.ControlName, temp.Position, temp.Name);
+
+                if (result.error != null)
+                {
+                    Console.WriteLine($"Ошибка создания ZedGraphPositionDto: {result.error}");
+                    new Exception(result.error);
+                }
+                else
+                {
+                    switch (startIndex)
+                    {
+                        case 0:
+                            if (result.zedGraphPositionDto.Id >= 0 && result.zedGraphPositionDto.Id <= 10)
+                            {
+                                dtoList.Add(result.zedGraphPositionDto);
+                            }
+                            break;
+
+                        case 10:
+                            if(result.zedGraphPositionDto.Id >= 11 && result.zedGraphPositionDto.Id <= 20)
+                            {
+                                dtoList.Add(result.zedGraphPositionDto);
+                            }
+                            break;
+
+                        case 20:
+                            if (result.zedGraphPositionDto.Id >= 21 && result.zedGraphPositionDto.Id <= 30)
+                            {
+                                dtoList.Add(result.zedGraphPositionDto);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // Обработка ошибки (например, логгирование)
+                }
+            }
 
             var resultGetListZedGraphControls = GetListZedGraphControls();
 
-            if(resultGetListZedGraphControls.error != null)
+            if (resultGetListZedGraphControls.error != null)
             {
                 new ArgumentException(resultGetListZedGraphControls.error);
             }
 
             List<ZedGraphPosition> graphPositions = ZedGraphPosition.FromDtoList(dtoList, resultGetListZedGraphControls.zedGraphControls);
 
+            count = 0;
+
             if (graphPositions != null)
             {
                 foreach (var pos in graphPositions)
                 {
-                    if(pos.Control != null && pos.Position != 0 && string.IsNullOrWhiteSpace(pos.Name))
+                    if (pos.Control != null)
                     {
-                        return (graphPositions, null);
+                        if (pos.Position != 0)
+                        {
+                            if (!string.IsNullOrWhiteSpace(pos.Name))
+                            {
+                                count++;
+                            }
+                        }
                     }
                 }
 
-                return (null, "Данные не могут быть null");
+                if (count == graphPositions.Count)
+                {
+                    _userSettingsDto = dtoList;
+                    return (graphPositions, null);
+                }
+                else
+                {
+                    return (null, "Данные не могут быть null");
+                }
             }
 
             return (null, "graphPositions can't null argument");
+        }
+
+        private void UpdateUserSettings()
+        {
+            var resultConvert = ZedGraphPositionDto.ConvertToDto(_graphPositions);
+
+            if (resultConvert.error != null)
+            {
+                new Exception(resultConvert.error);
+            }
+
+            var resultUpdate = UpdateControlPosition(resultConvert.zedGraphPositionDtos, _userSettingsDto);
+
+            if (resultUpdate.error != null)
+            {
+                new Exception(resultUpdate.error);
+            }
+
+            UpdateJsonFile(_userSettingsDto);
+        }
+
+        private void UpdateJsonFile(List<ZedGraphPositionDto> dtos)
+        {
+            string json = JsonConvert.SerializeObject(dtos, Formatting.Indented);
+            File.WriteAllText("UserSettings.json", json);
+        }
+
+        //HACK Переделать выход данных очень плохо всё
+        public static (bool isComplite, string error) UpdateControlPosition(List<ZedGraphPositionDto> newDto, List<ZedGraphPositionDto> jsonDto)
+        {
+            bool isComplite = true;
+
+            foreach (var js in jsonDto)
+            {
+                var existingPosition = newDto.Find(p => p.Id == js.Id);
+
+                if (existingPosition != null)
+                {
+                    js.ChangeDto(existingPosition.Position, existingPosition.Name);
+                }
+
+
+            }
+
+            if (isComplite == true)
+                return (isComplite, null);
+            else
+                return (isComplite, "");
+
         }
 
         private void CreateNewGraphPosition()
@@ -131,7 +263,7 @@ namespace Diagram
         {
             for (int i = 0; i < _zedGraphControls.Count; i++)
             {
-                var control = ZedGraphPosition.Create(_zedGraphControls[i], start, _zedGraphControls[i].Name);
+                var control = ZedGraphPosition.Create(i, _zedGraphControls[i], start, _zedGraphControls[i].Name);
 
                 if (control.error != null)
                     new Exception("Ошибка создания ZedGraphPosition + \n" + control.error);
@@ -149,6 +281,8 @@ namespace Diagram
             {
                 DrawGraph(item, item.Position);
             }
+
+            UpdateUserSettings();
         }
 
         /// <summary>
@@ -190,9 +324,9 @@ namespace Diagram
                 PointPair pointPair = new PointPair(time, value);
                 listPoints.Add(pointPair);
 
-                if(xmax_limit < time)
+                if (xmax_limit < time)
                     xmax_limit = time;
-                if(ymax_limit < value)
+                if (ymax_limit < value)
                     ymax_limit = value;
             }
 
@@ -214,9 +348,9 @@ namespace Diagram
                 pane.YAxis.Scale.Max = ymax_limit + step;
 
             }
-                zedGraph.Control.AxisChange();
-                // Обновляем график
-                zedGraph.Control.Invalidate();
+            zedGraph.Control.AxisChange();
+            // Обновляем график
+            zedGraph.Control.Invalidate();
         }
 
         private List<Graph> UpdateDataGraphs(List<Graph> baseGraphs, float timer = 20, bool isUpdate = true)
@@ -259,10 +393,10 @@ namespace Diagram
 
             if (checkBox1.Checked)
             {
-                for(int i = 0; i < _arrayZedGraphControlSwitch.Length; i++)
+                for (int i = 0; i < _arrayZedGraphControlSwitch.Length; i++)
                 {
                     countNotNull++;
-                    
+
                     if (_arrayZedGraphControlSwitch[i] == null)
                     {
                         _arrayZedGraphControlSwitch[i] = (ZedGraphControl)sender;
@@ -281,7 +415,7 @@ namespace Diagram
 
         private void ClearZedGrahpList()
         {
-            for(int i = 0; i < _arrayZedGraphControlSwitch.Length; i++)
+            for (int i = 0; i < _arrayZedGraphControlSwitch.Length; i++)
             {
                 _arrayZedGraphControlSwitch[i] = null;
             }

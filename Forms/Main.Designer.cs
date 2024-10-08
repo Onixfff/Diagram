@@ -383,7 +383,6 @@
 
         #endregion
 
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Panel ButtonsPanel;
         private System.Windows.Forms.Button Button2;
         private System.Windows.Forms.Button Button3;

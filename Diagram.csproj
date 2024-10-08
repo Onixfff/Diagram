@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="DataGraph.cs" />
     <Compile Include="Forms\ZedGraphPosition.cs" />
+    <Compile Include="Forms\ZedGraphPositionDto.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,7 +158,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="UserSettings.json" />
+    <None Include="UserSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\App.config" />

@@ -195,7 +195,10 @@ namespace Diagram
                         return reader.HasRows;
                     }
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) 
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 finally { _myConnection.Close();}
 
                 return false;

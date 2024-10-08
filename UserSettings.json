@@ -1,182 +1,212 @@
 [
   {
-    "ControlName": "",
+    "Id": 1,
+    "ControlName": "zedGraphControlMainUp",
     "Position": 1,
-    "Name": ""
+    "Name": "1"
   },
 
   {
-    "ControlName": "",
+    "Id": 2,
+    "ControlName": "zedGraphControlMainDown",
     "Position": 2,
-    "Name": ""
+    "Name": "2"
   },
 
   {
-    "ControlName": "",
+    "Id": 3,
+    "ControlName": "zedGraphControlUpLeft1",
     "Position": 3,
-    "Name": ""
+    "Name": "3"
   },
 
   {
-    "ControlName": "",
+    "Id": 4,
+    "ControlName": "zedGraphControlUpRight1",
     "Position": 4,
-    "Name": ""
+    "Name": "4"
   },
 
   {
-    "ControlName": "",
+    "Id": 5,
+    "ControlName": "zedGraphControlDownLeft1",
     "Position": 5,
-    "Name": ""
+    "Name": "5"
   },
 
   {
-    "ControlName": "",
+    "Id": 6,
+    "ControlName": "zedGraphControlDownRight1",
     "Position": 6,
-    "Name": ""
+    "Name": "6"
   },
 
   {
-    "ControlName": "",
+    "Id": 7,
+    "ControlName": "zedGraphControlUpLeft2",
     "Position": 7,
-    "Name": ""
+    "Name": "7"
   },
 
   {
-    "ControlName": "",
+    "Id": 8,
+    "ControlName": "zedGraphControlUpRight2",
     "Position": 8,
-    "Name": ""
+    "Name": "8"
   },
 
   {
-    "ControlName": "",
+    "Id": 9,
+    "ControlName": "zedGraphControlDownLeft2",
     "Position": 9,
-    "Name": ""
+    "Name": "9"
   },
 
   {
-    "ControlName": "",
+    "Id": 10,
+    "ControlName": "zedGraphControlDownRight2",
     "Position": 10,
-    "Name": ""
+    "Name": "10"
   },
 
   {
-    "ControlName": "",
+    "Id": 11,
+    "ControlName": "zedGraphControlMainUp",
     "Position": 11,
-    "Name": ""
+    "Name": "11"
   },
 
   {
-    "ControlName": "",
+    "Id": 12,
+    "ControlName": "zedGraphControlMainDown",
     "Position": 12,
-    "Name": ""
+    "Name": "12"
   },
 
   {
-    "ControlName": "",
+    "Id": 13,
+    "ControlName": "zedGraphControlUpLeft1",
     "Position": 13,
-    "Name": ""
+    "Name": "13"
   },
 
   {
-    "ControlName": "",
+    "Id": 14,
+    "ControlName": "zedGraphControlUpRight1",
     "Position": 14,
-    "Name": ""
+    "Name": "14"
   },
 
   {
-    "ControlName": "",
+    "Id": 15,
+    "ControlName": "zedGraphControlDownLeft1",
     "Position": 15,
-    "Name": ""
+    "Name": "15"
   },
 
   {
-    "ControlName": "",
+    "Id": 16,
+    "ControlName": "zedGraphControlDownRight1",
     "Position": 16,
-    "Name": ""
+    "Name": "16"
   },
 
   {
-    "ControlName": "",
+    "Id": 17,
+    "ControlName": "zedGraphControlUpLeft2",
     "Position": 17,
-    "Name": ""
+    "Name": "17"
   },
 
   {
-    "ControlName": "",
+    "Id": 18,
+    "ControlName": "zedGraphControlUpRight2",
     "Position": 18,
-    "Name": ""
+    "Name": "18"
   },
 
   {
-    "ControlName": "",
+    "Id": 19,
+    "ControlName": "zedGraphControlDownLeft2",
     "Position": 19,
-    "Name": ""
+    "Name": "19"
   },
 
   {
-    "ControlName": "",
+    "Id": 20,
+    "ControlName": "zedGraphControlDownRight2",
     "Position": 20,
-    "Name": ""
+    "Name": "20"
   },
 
   {
-    "ControlName": "",
+    "Id": 21,
+    "ControlName": "zedGraphControlMainUp",
     "Position": 21,
-    "Name": ""
+    "Name": "21"
   },
 
   {
-    "ControlName": "",
+    "Id": 22,
+    "ControlName": "zedGraphControlMainDown",
     "Position": 22,
-    "Name": ""
+    "Name": "22"
   },
 
   {
-    "ControlName": "",
+    "Id": 23,
+    "ControlName": "zedGraphControlUpLeft1",
     "Position": 23,
-    "Name": ""
+    "Name": "23"
   },
 
   {
-    "ControlName": "",
+    "Id": 24,
+    "ControlName": "zedGraphControlUpRight1",
     "Position": 24,
-    "Name": ""
+    "Name": "24"
   },
 
   {
-    "ControlName": "",
+    "Id": 25,
+    "ControlName": "zedGraphControlDownLeft1",
     "Position": 25,
-    "Name": ""
+    "Name": "25"
   },
 
   {
-    "ControlName": "",
+    "Id": 26,
+    "ControlName": "zedGraphControlDownRight1",
     "Position": 26,
-    "Name": ""
+    "Name": "26"
   },
 
   {
-    "ControlName": "",
+    "Id": 27,
+    "ControlName": "zedGraphControlUpLeft2",
     "Position": 27,
-    "Name": ""
+    "Name": "27"
   },
 
   {
-    "ControlName": "",
+    "Id": 28,
+    "ControlName": "zedGraphControlUpRight2",
     "Position": 28,
-    "Name": ""
+    "Name": "28"
   },
 
   {
-    "ControlName": "",
+    "Id": 29,
+    "ControlName": "zedGraphControlDownLeft2",
     "Position": 29,
-    "Name": ""
+    "Name": "29"
   },
 
   {
-    "ControlName": "",
+    "Id": 30,
+    "ControlName": "zedGraphControlDownRight2",
     "Position": 30,
-    "Name": ""
+    "Name": "30"
   }
 
 ]

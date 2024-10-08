@@ -4,42 +4,43 @@ using ZedGraph;
 
 namespace Diagram
 {
-    public class ZedGraphPositionDto
-    {
-        public string ControlName { get; set; }
-        public int Position { get; set; }
-        public string Name { get; set; }
-    }
 
     public class ZedGraphPosition
     {
+        public int Id { get; private set; }
         public ZedGraphControl Control { get; private set; }
         public int Position { get; private set; }
 
         public string Name { get; private set; }
 
-        private ZedGraphPosition(ZedGraphControl control, int position, string name)
+        private static int CountId = 0;
+
+        private ZedGraphPosition(int id, ZedGraphControl control, int position, string name)
         {
+            Id = id;
             Control = control;
             Position = position;
             Name = name;
         }
 
-        public static (ZedGraphPosition zedGraphPosition, string error) Create(ZedGraphControl control, int position, string nameZedGraphStart)
+        public static (ZedGraphPosition zedGraphPosition, string error) Create(int id, ZedGraphControl control, int position, string nameZedGraphStart)
         {
             //Проверкм
 
-            if(control == null)
+            if(id <= 0 && id > CountId)
+                return (null, "Control can not be zero or negative");
+
+            if (control == null)
                 return (null, "Control can not be empty");
 
-            if(position == 0)
-                return (null, "Control can not be zero");
+            if(position <= 0)
 
             if (string.IsNullOrWhiteSpace(nameZedGraphStart))
                 return (null, "nameZedGraphStart con not be empty");
 
             //Создание
-            var zedGraphPosition = new ZedGraphPosition(control, position, nameZedGraphStart);
+            var zedGraphPosition = new ZedGraphPosition(id, control, position, nameZedGraphStart);
+            CountId++;
 
             return (zedGraphPosition, null);
         }
@@ -79,7 +80,9 @@ namespace Diagram
 
         private ZedGraphPosition Clone()
         {
-            var zedGraphCopy = ZedGraphPosition.Create(Control = this.Control,
+            var zedGraphCopy = ZedGraphPosition.Create(
+                Id = this.Id,
+                Control = this.Control,
                 Position = this.Position,
                 Name = this.Name);
 
@@ -103,7 +106,7 @@ namespace Diagram
                 if (control != null)
                 {
                     // Создаем ZedGraphPosition на основе найденного Control
-                    var resultCreate = Create(control, dto.Position, dto.Name);
+                    var resultCreate = Create(dto.Id ,control, dto.Position, dto.Name);
 
                     if(resultCreate.error != null)
                     {
@@ -120,5 +123,6 @@ namespace Diagram
 
             return result;
         }
+
     }
 }
