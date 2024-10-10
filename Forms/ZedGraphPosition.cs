@@ -7,6 +7,7 @@ namespace Diagram
 
     public class ZedGraphPosition
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         public int Id { get; private set; }
         public ZedGraphControl Control { get; private set; }
         public int Position { get; private set; }
@@ -28,15 +29,28 @@ namespace Diagram
             //Проверкм
 
             if(id <= 0 && id > CountId)
+            {
+                _logger.Error("Control can not be zero or negative");
                 return (null, "Control can not be zero or negative");
+            }
 
             if (control == null)
+            {
+                _logger.Error("Control can not be empty");
                 return (null, "Control can not be empty");
+            }
 
-            if(position <= 0)
+            if (position <= 0)
+            {
+                _logger.Error("Position can not be zero or negative");
+                return (null, "Position can not be zero or negative");
+            }
 
             if (string.IsNullOrWhiteSpace(nameZedGraphStart))
+            {
+                _logger.Error("Control can not be zero or negative");
                 return (null, "nameZedGraphStart con not be empty");
+            }
 
             //Создание
             var zedGraphPosition = new ZedGraphPosition(id, control, position, nameZedGraphStart);
@@ -117,6 +131,7 @@ namespace Diagram
                 }
                 else
                 {
+                    _logger.Error($"Control with name {dto.ControlName} not found");
                     throw new Exception($"Control with name {dto.ControlName} not found");
                 }
             }

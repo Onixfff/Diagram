@@ -2,6 +2,7 @@
 
 namespace Diagram
 {
+
     public class ZedGraphPositionDtoData
     {
         public int Id { get; set; }
@@ -20,6 +21,8 @@ namespace Diagram
 
     public class ZedGraphPositionDto
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public int Id { get; private set; }
 
         public string ControlName { get; private set; }
@@ -40,22 +43,26 @@ namespace Diagram
         {
             if(id <= 0)
             {
+                _logger.Error("id can not be zero or negative");
                 return (null, "id can not be zero or negative");
             }
 
             //Валидация
             if (string.IsNullOrWhiteSpace(controlName))
             {
+                _logger.Error("ControlName can not be empty or white Space");
                 return (null, "ControlName can not be empty or white Space");
             }
 
             if (string.IsNullOrWhiteSpace(name))
             {
+                _logger.Error("Name can not be empty or white Space");
                 return (null, "Name can not be empty or white Space");
             }
 
             if (position <= 0)
             {
+                _logger.Error("Position can not be zero or negative");
                 return (null, "Position can not be zero or negative");
             }
 
@@ -80,6 +87,7 @@ namespace Diagram
 
                         if (result.error != null)
                         {
+                            _logger.Error("ZedGraphPositionDto can not be null" + "(result.error)");
                             return (null, "ZedGraphPositionDto can not be null" + "(result.error)");
                         }
 
@@ -87,7 +95,8 @@ namespace Diagram
                     }
                     else
                     {
-                        return (null, "Position[i] Can not be null ");
+                        _logger.Error("Position[i] Can not be null");
+                        return (null, "Position[i] Can not be null");
                     }
                 }
 
@@ -97,7 +106,8 @@ namespace Diagram
                 }
             }
 
-            return (null, "Position can not be null or can not be position.Count <= 0 ");
+            _logger.Error("Position can not be null or can not be position.Count <= 0");
+            return (null, "Position can not be null or can not be position.Count <= 0");
         }
 
         public void ChangeDto(int position, string name)
