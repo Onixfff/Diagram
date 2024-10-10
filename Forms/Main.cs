@@ -399,6 +399,9 @@ namespace Diagram
 
             }
             zedGraph.Control.AxisChange();
+
+            zedGraph.Control.RestoreScale(zedGraph.Control.GraphPane);
+
             // Обновляем график
             zedGraph.Control.Invalidate();
         }
