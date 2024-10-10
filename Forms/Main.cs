@@ -216,6 +216,8 @@ namespace Diagram
 
         private void UpdateUserSettings()
         {
+            _logger.Trace("Защёл в UpdateUserSettings");
+
             var resultConvert = ZedGraphPositionDto.ConvertToDto(_graphPositions);
 
             if (resultConvert.error != null)
@@ -235,6 +237,7 @@ namespace Diagram
 
         private void UpdateJsonFile(List<ZedGraphPositionDto> dtos)
         {
+            _logger.Trace("Защёл в UpdateJsonFile");
 
             string json = File.ReadAllText("UserSettings.json");
 
@@ -278,6 +281,8 @@ namespace Diagram
         //HACK Переделать выход данных очень плохо всё
         public static (bool isComplite, string error) UpdateControlPosition(List<ZedGraphPositionDto> newDto, List<ZedGraphPositionDto> jsonDto)
         {
+            _logger.Trace("Защёл в UpdateControlPosition");
+
             bool isComplite = true;
 
             foreach (var js in jsonDto)
@@ -318,6 +323,8 @@ namespace Diagram
 
         private void SwitchZedGraphControlPosition()
         {
+            _logger.Trace("Защёл в SwitchZedGraphControlPosition");
+
             _graphPositions = ZedGraphPosition.SwapPosition(_graphPositions, _arrayZedGraphControlSwitch);
 
             foreach (var item in _graphPositions)
@@ -433,9 +440,10 @@ namespace Diagram
         private void zedGraphControlMainUp_MouseClick(object sender, MouseEventArgs e)
         {
             int countNotNull = 0;
-
             if (checkBox1.Checked)
             {
+                _logger.Trace("Работает Перестановка (запуск сохранения)");
+
                 for (int i = 0; i < _arrayZedGraphControlSwitch.Length; i++)
                 {
                     countNotNull++;

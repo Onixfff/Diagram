@@ -61,6 +61,8 @@ namespace Diagram
 
         public static List<ZedGraphPosition> SwapPosition(List<ZedGraphPosition> positions, ZedGraphControl[] controls)
         {
+            _logger.Trace("Защёл в SwapPosition");
+
             List<ZedGraphPosition> swapPosition = new List<ZedGraphPosition>();
 
             for (int i = 0; i < positions.Count; i++) 

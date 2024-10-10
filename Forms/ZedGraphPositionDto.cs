@@ -73,6 +73,8 @@ namespace Diagram
 
         public static (List<ZedGraphPositionDto> zedGraphPositionDtos, string error) ConvertToDto(List<ZedGraphPosition> position)
         {
+            _logger.Trace("Защёл в ConvertToDto");
+
             List<ZedGraphPositionDto> dto = new List<ZedGraphPositionDto>();
 
             //Валидация
