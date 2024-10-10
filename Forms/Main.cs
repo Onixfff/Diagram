@@ -361,10 +361,8 @@ namespace Diagram
             pane.XAxis.Title.Text = "Время";
             pane.YAxis.Title.Text = "Значение";
 
-            //Заполнение таблицы
+            // Заполнение таблицы
             dataGraphs = graphs[count].GetDataGraphs();
-
-            // !!! Создадим список
 
             for (int j = 0; j < dataGraphs.Count; j++)
             {
@@ -378,16 +376,14 @@ namespace Diagram
                     xmax_limit = time;
                 if (ymax_limit < value)
                     ymax_limit = value;
+
+                // Создаем текстовую метку для каждой точки
+                TextObj text = new TextObj($"({time:F2}, {value:F2})", time, value, CoordType.AxisXYScale, AlignH.Center, AlignV.Center);
+                text.FontSpec.Border.IsVisible = false;  // Отключаем рамку текста
+                pane.GraphObjList.Add(text);  // Добавляем текст на график
             }
 
-            // Создадим кривую с названием "Название из бд",
-            // которая будет рисоваться голубым цветом (Color.Blue),
-            // Опорные точки выделяться не будут (SymbolType.None)
-            if (dataGraphs.Count <= 0)
-            {
-
-            }
-            else
+            if (dataGraphs.Count > 0)
             {
                 LineItem myCurve = pane.AddCurve(dataGraphs[0].GetNameTable(), listPoints, Color.Blue, SymbolType.Diamond);
 
@@ -397,11 +393,17 @@ namespace Diagram
                 pane.YAxis.Scale.Min = ymin_limit;
                 pane.YAxis.Scale.Max = ymax_limit + step;
 
+                // Включаем отображение значений для каждой точки
+                myCurve.Label.IsVisible = true;              // Отображение меток
+                myCurve.Symbol.IsVisible = true;             // Отображение символов
             }
+
             zedGraph.Control.AxisChange();
+
             // Обновляем график
             zedGraph.Control.Invalidate();
         }
+
 
         private List<Graph> UpdateDataGraphs(List<Graph> baseGraphs, float timer = 20, bool isUpdate = true)
         {
