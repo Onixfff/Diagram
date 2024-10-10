@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SampleDiagram));
             this.comboBoxRoms = new System.Windows.Forms.ComboBox();
             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.comboBoxPreparationStartDates = new System.Windows.Forms.ComboBox();
@@ -109,9 +110,10 @@
             this.ClientSize = new System.Drawing.Size(1728, 845);
             this.Controls.Add(this.zedGraphControlFilter);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SampleDiagram";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "SampleDiagram";
+            this.Text = "Выборочная форма";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

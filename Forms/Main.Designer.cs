@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.ButtonsPanel = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button4 = new System.Windows.Forms.Button();
             this.Button2 = new System.Windows.Forms.Button();
             this.Button3 = new System.Windows.Forms.Button();
@@ -48,7 +50,6 @@
             this.zedGraphControlDownRight1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlDownLeft1 = new ZedGraph.ZedGraphControl();
             this.zedGraphControlUpLeft1 = new ZedGraph.ZedGraphControl();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.ButtonsPanel.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.tableLayoutPanelDownMain.SuspendLayout();
@@ -68,6 +69,17 @@
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.Size = new System.Drawing.Size(413, 29);
             this.ButtonsPanel.TabIndex = 6;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(246, 7);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(92, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "Переставить";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button4
             // 
@@ -349,26 +361,16 @@
             this.zedGraphControlUpLeft1.UseExtendedPrintDialog = true;
             this.zedGraphControlUpLeft1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.zedGraphControlMainUp_MouseClick);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(246, 7);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(92, 17);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "Переставить";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1896, 1006);
             this.Controls.Add(this.tableLayoutPanelMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Главная";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ButtonsPanel.ResumeLayout(false);
             this.ButtonsPanel.PerformLayout();
