@@ -10,6 +10,8 @@ namespace Diagram
 {
     internal class Database
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         public enum RoomNames
         {
             graph1,
@@ -111,7 +113,7 @@ namespace Diagram
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Ошибка при проверке базы данных: {ex.Message}");
+                    _logger.Error($"Ошибка при проверке базы данных: {ex.Message}");
                     return false;
                 }
             }
@@ -158,8 +160,7 @@ namespace Diagram
                     }
                     catch(Exception ex)
                     {
-                        Console.WriteLine("Error: " + ex.Message);
-                        Console.WriteLine(ex.StackTrace);
+                        _logger.Error($"Error: {ex.Message}");
                     }
                     finally { _myConnection.Close(); }
                 }
@@ -197,7 +198,7 @@ namespace Diagram
                 }
                 catch (Exception ex) 
                 {
-                    MessageBox.Show(ex.Message);
+                    _logger.Error($"Ошибка при проверке базы данных: {ex.Message}");
                 }
                 finally { _myConnection.Close();}
 
@@ -222,7 +223,7 @@ namespace Diagram
                 catch (Exception ex)
                 {
                     isComplite = false;
-                    Console.WriteLine($"Ошибка при создании базы данных: {ex.Message}");
+                    _logger.Error($"Ошибка при создании базы данных: {ex.Message}");
                 }
                 finally
                 {
@@ -269,9 +270,9 @@ namespace Diagram
                     graphs.Add(graph);
                     dataGraphs.Clear();
                 }
-                catch
+                catch(Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при получении начала заготовки");
+                    _logger.Error($"Ошибка при получении начала заголовка: {ex.Message}");
                 }
                 finally 
                 { 
@@ -307,8 +308,7 @@ namespace Diagram
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error: " + ex.Message);
-                    Console.WriteLine(ex.StackTrace);
+                    _logger.Error($"Error: {ex.Message}");
                 }
                 finally { _myConnection.Close(); }
             }
@@ -338,10 +338,10 @@ namespace Diagram
                     command.ExecuteNonQuery();
                     isComplite = true;
                 }
-                catch
+                catch(Exception ex)
                 {
                     isComplite = false;
-                    MessageBox.Show($"Ошибка при создании таблицы #{tableName}");
+                    _logger.Error($"Ошибка при создании таблицы #{tableName}\n {ex.Message}");
                 }
                 finally
                 {

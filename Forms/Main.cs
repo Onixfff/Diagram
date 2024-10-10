@@ -1,5 +1,4 @@
-﻿using MySqlX.XDevAPI.Common;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +11,8 @@ namespace Diagram
 {
     public partial class Main : Form
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         Database _db = new Database();
         List<DataGraph> dataGraphs = new List<DataGraph>();
 
@@ -76,6 +77,7 @@ namespace Diagram
 
                     _graphPositions = result.position;
 
+                    _logger.Trace("Защёл в case 0:");
                     break;
                 case 10:
 
@@ -86,6 +88,8 @@ namespace Diagram
                         new ArgumentException(result.error);
                     }
 
+                    _logger.Trace("Защёл в case 10:");
+
                     _graphPositions = result.position;
 
                     break;
@@ -93,28 +97,33 @@ namespace Diagram
 
                     result = TakeGraphPositionInJsonFile(20);
 
-
                     if (result.error != null)
                     {
                         new ArgumentException(result.error);
                     }
 
+                    _logger.Trace("Защёл в case 20:");
+
                     _graphPositions = result.position;
 
                     break;
                 default:
+                    _logger.Error("Switch не прошёл\nобратитесь за помощью");
                     MessageBox.Show("Неправельно задали стартовое значение для вывода диаграм");
                     break;
             }
 
             foreach (var item in _graphPositions)
             {
+                _logger.Trace("Обновление DrawGraph");
                 DrawGraph(item, item.Position);
             }
         }
 
         private (List<ZedGraphPosition> position, string error) TakeGraphPositionInJsonFile(int startIndex)
         {
+            _logger.Trace("Защёл в TakeGraphPositionInJsonFile");
+
             string json = File.ReadAllText("UserSettings.json");
 
             List<ZedGraphPositionDtoData> dtoListData = JsonConvert.DeserializeObject<List<ZedGraphPositionDtoData>>(json);
@@ -129,7 +138,7 @@ namespace Diagram
 
                 if (result.error != null)
                 {
-                    Console.WriteLine($"Ошибка создания ZedGraphPositionDto: {result.error}");
+                    _logger.Error(result.error);
                     new Exception(result.error);
                 }
                 else
@@ -241,7 +250,7 @@ namespace Diagram
 
                 if (result.error != null)
                 {
-                    Console.WriteLine($"Ошибка создания ZedGraphPositionDto: {result.error}");
+                    _logger.Error(result.error);
                     new Exception(result.error);
                 }
 
