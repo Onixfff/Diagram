@@ -121,7 +121,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\DataBaseRepository.cs" />
+    <Compile Include="DataAccess\IDataBaseRepository.cs" />
     <Compile Include="DB\Database.cs" />
+    <Compile Include="DependencyInjection\ContainerConfig.cs" />
+    <Compile Include="DTO\GraphDataPointDTO.cs" />
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,8 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\" />
-    <Folder Include="DataAccess\" />
-    <Folder Include="DependencyInjection\" />
     <Folder Include="Services\" />
     <Folder Include="Views\" />
   </ItemGroup>
