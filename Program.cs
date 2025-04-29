@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Diagram.Forms;
+using System;
 using System.Windows.Forms;
 
 namespace Diagram
@@ -13,7 +14,7 @@ namespace Diagram
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Application.Run(new Form1());
         }
     }
 }
