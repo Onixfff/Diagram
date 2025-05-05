@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1477521928_10_icon-icons.com_74620.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\1477521928_10_icon-icons.com_74620.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=8.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -207,7 +207,7 @@
     <None Include="Properties\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1477521928_10_icon-icons.com_74620.ico" />
+    <Content Include="Icons\1477521928_10_icon-icons.com_74620.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\" />
