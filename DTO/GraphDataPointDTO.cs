@@ -19,7 +19,7 @@ namespace Diagram.DTO
 
         public static GraphDataPointDTO Create(int idGraph, DateTime pointDateTime, float value, int time)
         {
-            //Проверка
+            //TODO Проверка
 
             return new GraphDataPointDTO(idGraph, pointDateTime, value, time);
         }

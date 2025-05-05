@@ -1,4 +1,6 @@
-﻿using Diagram.Forms;
+﻿using Autofac;
+using Diagram.DependencyInjection;
+using Diagram.Forms;
 using System;
 using System.Windows.Forms;
 
@@ -14,7 +16,15 @@ namespace Diagram
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // Создаём контейнер
+            var container = new ContainerConfig().Configure();
+
+            using(var score = container.BeginLifetimeScope())
+            {
+                var mainForm = score.Resolve<MainForm>();
+                Application.Run(mainForm);
+            }
         }
     }
 }

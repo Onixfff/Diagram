@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Diagram.DataAccess;
+using Diagram.Forms;
+using Diagram.Presenters;
 using NLog;
 using System.Configuration;
 
@@ -18,14 +20,26 @@ namespace Diagram.DependencyInjection
                 throw new ConfigurationErrorsException($"Строка подключения '{connectionString}' не найдена в конфигурации.");
             }
 
-            //Регистрация логера
+            //Logger
             builder.Register(c => LogManager.GetCurrentClassLogger())
-                .As<ILogger>();
+                .As<ILogger>()
+                .SingleInstance();
 
-            //Регистрация репозитория базы данных
+            //Repository
             builder.RegisterType<DataBaseRepository>()
                 .As<IDataBaseRepository>()
-                .WithParameter("connectionString", connectionString);
+                .WithParameter("connectionString", connectionString)
+                .InstancePerLifetimeScope();
+
+            //Presenter
+            builder.RegisterType<MainPresenter>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            //View
+            builder.RegisterType<MainForm>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             return builder.Build();
         }
