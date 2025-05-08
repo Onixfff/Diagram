@@ -146,6 +146,5 @@ namespace Diagram.Forms
             _logger.Warn($"вызвана ошибка {message}" );
             MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-
     }
 }

@@ -15,9 +15,10 @@ namespace Diagram.Presenters
         private readonly IDataBaseRepository _repository;
         private readonly ILogger _logger;
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        
-        private List<MiniPlotData> _miniPlotsDataCatch = new List<MiniPlotData>();
+        private System.Timers.Timer _autoRefreshTimer;
 
+        private int _startIdInitializeMainPlot = 0;
+        
         public MainPresenter(IMainForm view, IDataBaseRepository repository, ILogger logger)
         {
             _view = view ?? throw new ArgumentNullException(nameof(view));
@@ -30,14 +31,14 @@ namespace Diagram.Presenters
             _view.CancelRequested += OnCancelRequested;
         }
 
-        private async void OnFormLoaded(object sender, EventArgs e)
+        private void OnFormLoaded(object sender, EventArgs e)
         {
             try
             {
                 _cts?.Cancel();
                 _cts = new CancellationTokenSource();
-                await LoadMiniPlotsAsync(_cts.Token);
-                InitializeMainPlot();
+
+                InitializePlotsAutoRefresh(_cts.Token);
             }
             catch(OperationCanceledException)
             {
@@ -74,7 +75,8 @@ namespace Diagram.Presenters
                 });
 
                 var graphIds = await _repository.GetAllGraphIdsAsync(token).ConfigureAwait(false);
-                _miniPlotsDataCatch = new List<MiniPlotData>();
+                
+                var miniPlotData = new List<MiniPlotData>();
                 int total = graphIds.Count + 1;
                 int current = 0;
 
@@ -82,7 +84,7 @@ namespace Diagram.Presenters
                 {
                     var xValues = await _repository.GetValuesAsync(id, token);
                     var yTimes = await _repository.GetTimesAsync(id, token);
-                    _miniPlotsDataCatch.Add(new MiniPlotData(id, xValues, yTimes));
+                    miniPlotData.Add(new MiniPlotData(id, xValues, yTimes));
 
                     //Обновление progressBar
                     current++;
@@ -90,8 +92,8 @@ namespace Diagram.Presenters
                     progress.Report(percentComplete);
                 }
 
-                _miniPlotsDataCatch = SortMiniPlots(_miniPlotsDataCatch);
-                _view.DisplayMiniPlots(_miniPlotsDataCatch);
+                miniPlotData = SortMiniPlots(miniPlotData);
+                _view.DisplayMiniPlots(miniPlotData);
             }
             catch (OperationCanceledException)
             {
@@ -101,7 +103,7 @@ namespace Diagram.Presenters
             }
             catch (Exception ex)
             {
-                var error = "$\"Ошибка загрузки данных: {ex.Message}\"";
+                var error = $"Ошибка загрузки данных: {ex.Message}";
                 _logger.Error(error);
                 _view.ShowErrorMessage(error);
             }
@@ -112,19 +114,26 @@ namespace Diagram.Presenters
             return miniPlotDatas.OrderBy(x => x.Id).ToList();
         }
 
-        private void InitializeMainPlot()
+        private void InitializePlotsAutoRefresh(CancellationToken token)
         {
             try
             {
-                int plotId = _miniPlotsDataCatch[0].Id;
-                var xValues = _miniPlotsDataCatch[0].XValue;
-                var yTimes = _miniPlotsDataCatch[0].YTime;
+                _autoRefreshTimer = new System.Timers.Timer(5000);
 
-                _view.UpdateMainPlot(plotId, xValues, yTimes);
+                _autoRefreshTimer.Elapsed += async (sender, arhs) =>
+                {
+                    await LoadMiniPlotsAsync(_cts.Token);
+                    await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
+                };
+
+                _autoRefreshTimer.AutoReset = true;
+                _autoRefreshTimer.Enabled = true;
             }
             catch (Exception ex)
             {
-                _view.ShowErrorMessage($"Ошибка инициализации графика: {ex.Message}");
+                var error = $"Ошибка инициализации графика: {ex.Message}";
+                _logger.Error(error);
+                _view.ShowErrorMessage(error);
             }
             finally
             {
@@ -136,6 +145,8 @@ namespace Diagram.Presenters
         {
             try
             {
+                _startIdInitializeMainPlot = plotId;
+
                 var xValues = await _repository.GetValuesAsync(plotId, token);
                 var yTimes = await _repository.GetTimesAsync(plotId, token);
                 _view.UpdateMainPlot(plotId, xValues, yTimes);
@@ -155,6 +166,9 @@ namespace Diagram.Presenters
         {
             _cts?.Cancel();
             _cts?.Dispose();
+
+            _autoRefreshTimer?.Stop();
+            _autoRefreshTimer?.Dispose();
 
             _view.FormLoaded -= OnFormLoaded;
             _view.PlotSelected -= OnPlotSelected;

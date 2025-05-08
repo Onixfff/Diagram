@@ -15,6 +15,7 @@ namespace Diagram.Interfaces
         // Методы для обновления UI
         void DisplayMiniPlots(IEnumerable<MiniPlotData> plots);
         void UpdateMainPlot(int plotId, List<float> xValues, List<int> yTimes);
+
         void ShowProgressIndicator();
         void HideProgressIndicator();
         void ShowErrorMessage(string message);
