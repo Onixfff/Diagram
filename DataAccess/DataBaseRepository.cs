@@ -92,8 +92,7 @@ namespace Diagram.DataAccess
 
         public async Task<List<int>> GetAllGraphIdsAsync(CancellationToken token)
         {
-            //TODO Добавить sql на GetAllGraphIdsAsync
-            string sql = "@";
+            string sql = "SELECT id FROM Graph ORDER BY id;";
 
             try
             {
