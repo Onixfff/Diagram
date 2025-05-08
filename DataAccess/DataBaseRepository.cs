@@ -163,8 +163,7 @@ namespace Diagram.DataAccess
 
         public async Task<List<float>> GetValuesAsync(int idGraph, CancellationToken token)
         {
-            //TODO Добавить sql на GetValuesAsunc
-            string sql = "@";
+            string sql = "\"SELECT Value FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph);\";";
 
             try
             {
@@ -235,8 +234,7 @@ namespace Diagram.DataAccess
 
         public async Task<List<int>> GetTimesAsync(int idGraph, CancellationToken token)
         {
-            //TODO Добавить sql на GetTimesAsunc
-            string sql = "@";
+            string sql = "SELECT Time FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph);";
 
             try
             {
