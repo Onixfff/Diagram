@@ -1,5 +1,4 @@
-﻿using Diagram.Presenters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Diagram.Interfaces
@@ -17,8 +16,7 @@ namespace Diagram.Interfaces
         void DisplayMiniPlots(IEnumerable<MiniPlotData> plots);
         void UpdateMainPlot(int plotId, List<float> xValues, List<int> yTimes);
 
-        void ShowProgressIndicator();
-        void HideProgressIndicator();
+        void ShowProgressIndicator(bool show);
         void ShowErrorMessage(string message);
         void UpdateProgress(int progressPercentage);
     }

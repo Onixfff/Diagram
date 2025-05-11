@@ -1,8 +1,6 @@
 ﻿using Diagram.DataAccess;
 using Diagram.Interfaces;
-using Diagram.Presenters;
 using NLog;
-using ScottPlot;
 using ScottPlot.WinForms;
 using System;
 using System.Collections.Generic;
@@ -25,13 +23,8 @@ namespace Diagram.Forms
         private readonly ILogger _logger;
         private readonly IDataBaseRepository _dataBaseRepository;
 
-        //Размер диаграмы
+        //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
-
-        //Данные для меток в FormPlot
-        int markerSize = 10;
-        System.Drawing.Color markerColor = System.Drawing.Color.Blue;
-        MarkerShape markerShape = MarkerShape.HashTag;
 
         public MainForm(IDataBaseRepository dataBaseRepository, ILogger logger)
         {
@@ -73,15 +66,15 @@ namespace Diagram.Forms
             formsPlotMain.Refresh();
         }
 
-        public void ShowProgressIndicator()
+        public void ShowProgressIndicator(bool show)
         {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke(new Action(() => ShowProgressIndicator(show)));
+                return;
+            }
             // Например, отобразить ProgressBar
-            progressBar1.Visible = true;
-        }
-
-        public void HideProgressIndicator()
-        {
-            progressBar1.Visible = false;
+            progressBar1.Visible = show;    
         }
 
         private void LeftFormsPlot_DoubleClick(object sender, EventArgs e)

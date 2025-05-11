@@ -18,7 +18,7 @@ namespace Diagram.Presenters
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private System.Windows.Forms.Timer _autoRefreshTimer;
 
-        private int _startIdInitializeMainPlot = 0;
+        private int _startIdInitializeMainPlot = 1;
 
         private bool _disposed = false;
 
@@ -34,12 +34,15 @@ namespace Diagram.Presenters
             this.View.CancelRequested += OnCancelRequested;
         }
 
-        private void OnFormLoaded(object sender, EventArgs e)
+        private async void OnFormLoaded(object sender, EventArgs e)
         {
             try
             {
                 _cts?.Cancel();
                 _cts = new CancellationTokenSource();
+
+                await LoadMiniPlotsAsync(_cts.Token, true);
+                await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
 
                 InitializePlotsAutoRefresh(_cts.Token);
             }
@@ -67,11 +70,11 @@ namespace Diagram.Presenters
 
         }
 
-        private async Task LoadMiniPlotsAsync(CancellationToken token)
+        private async Task LoadMiniPlotsAsync(CancellationToken token, bool showProgress = false)
         {
             try
             {
-                View.ShowProgressIndicator();
+                View.ShowProgressIndicator(showProgress);
                 IProgress<int> progress = new Progress<int>(percent =>
                 {
                     View.UpdateProgress(percent);
@@ -141,7 +144,7 @@ namespace Diagram.Presenters
             }
             finally
             {
-                View.HideProgressIndicator();
+                View.ShowProgressIndicator(false);
             }
         }
 
