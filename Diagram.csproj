@@ -159,7 +159,6 @@
   <ItemGroup>
     <Compile Include="DataAccess\DataBaseRepository.cs" />
     <Compile Include="DataAccess\IDataBaseRepository.cs" />
-    <Compile Include="DB\Database.cs" />
     <Compile Include="DependencyInjection\ContainerConfig.cs" />
     <Compile Include="DTO\GraphDataPointDTO.cs" />
     <Compile Include="Interfaces\IMainForm.cs" />
@@ -185,6 +184,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

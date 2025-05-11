@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Diagram.DependencyInjection;
 using Diagram.Forms;
+using Diagram.Presenters;
 using System;
 using System.Windows.Forms;
 
@@ -14,16 +15,24 @@ namespace Diagram
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            // Создаём контейнер
-            var container = new ContainerConfig().Configure();
-
-            using(var score = container.BeginLifetimeScope())
+            try
             {
-                var mainForm = score.Resolve<MainForm>();
-                Application.Run(mainForm);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                var container = new ContainerConfig().Configure();
+
+                using (var scope = container.BeginLifetimeScope())
+                {
+                    var presenter = scope.Resolve<MainPresenter>();
+                    var view = presenter.View as MainForm;
+
+                    Application.Run(view);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }

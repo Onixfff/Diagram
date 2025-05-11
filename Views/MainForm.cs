@@ -24,7 +24,6 @@ namespace Diagram.Forms
 
         private readonly ILogger _logger;
         private readonly IDataBaseRepository _dataBaseRepository;
-        private readonly MainPresenter _presenter;
 
         //Размер диаграмы
         private readonly Size _sizeFormPlot = new Size(355, 247);
@@ -34,11 +33,10 @@ namespace Diagram.Forms
         System.Drawing.Color markerColor = System.Drawing.Color.Blue;
         MarkerShape markerShape = MarkerShape.HashTag;
 
-        public MainForm(IDataBaseRepository dataBaseRepository, MainPresenter mainPresenter, ILogger logger)
+        public MainForm(IDataBaseRepository dataBaseRepository, ILogger logger)
         {
             _dataBaseRepository = dataBaseRepository;
             _logger = logger;
-            _presenter = mainPresenter;
 
             InitializeComponent();
         }
@@ -50,6 +48,12 @@ namespace Diagram.Forms
 
         public void DisplayMiniPlots(IEnumerable<MiniPlotData> plots)
         {
+            if (flowLayoutPanel1.InvokeRequired)
+            {
+                flowLayoutPanel1.Invoke(new Action(() => DisplayMiniPlots(plots)));
+                return;
+            }
+
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.Controls.Clear();
 
@@ -99,6 +103,12 @@ namespace Diagram.Forms
 
         private void CreatesMiniPlot(int idFormPort, List<float> xValue, List<int> yTime)
         {
+            if (flowLayoutPanel1.InvokeRequired)
+            {
+                flowLayoutPanel1.Invoke(new Action(() => CreatesMiniPlot(idFormPort, xValue, yTime)));
+                return;
+            }
+
             FormsPlot formsPlot = new FormsPlot()
             {
                 Size = _sizeFormPlot,

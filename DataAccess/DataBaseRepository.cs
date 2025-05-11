@@ -92,7 +92,7 @@ namespace Diagram.DataAccess
 
         public async Task<List<int>> GetAllGraphIdsAsync(CancellationToken token)
         {
-            string sql = "SELECT id FROM Graph ORDER BY id;";
+            string sql = "SELECT IdGraph FROM Graph ORDER BY IdGraph;";
 
             try
             {
@@ -114,7 +114,7 @@ namespace Diagram.DataAccess
 
                             while (await reader.ReadAsync(token))
                             {
-                                var result = reader["id"];
+                                var result = reader["IdGraph"];
 
                                 if (result == DBNull.Value || result == null)
                                 {
@@ -162,7 +162,7 @@ namespace Diagram.DataAccess
 
         public async Task<List<float>> GetValuesAsync(int idGraph, CancellationToken token)
         {
-            string sql = "\"SELECT Value FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph);\";";
+            string sql = "SELECT Value FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)";
 
             try
             {
@@ -174,10 +174,10 @@ namespace Diagram.DataAccess
 
                     using (var command = new MySqlCommand(sql, connection))
                     {
+                        command.Parameters.AddWithValue("@IdGraph", idGraph);
+
                         using (var reader = await command.ExecuteReaderAsync(token))
                         {
-                            command.Parameters.AddWithValue("@IdGraph", idGraph);
-
                             token.ThrowIfCancellationRequested();
 
                             List<float> valueDataPoints = new List<float>();
@@ -245,10 +245,10 @@ namespace Diagram.DataAccess
 
                     using (var command = new MySqlCommand(sql, connection))
                     {
+                        command.Parameters.AddWithValue("@IdGraph", idGraph);
+
                         using (var reader = await command.ExecuteReaderAsync(token))
                         {
-                            command.Parameters.AddWithValue("@IdGraph", idGraph);
-
                             token.ThrowIfCancellationRequested();
 
                             List<int> TimeDataPoints = new List<int>();

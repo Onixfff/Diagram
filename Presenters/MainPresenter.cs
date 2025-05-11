@@ -11,24 +11,27 @@ namespace Diagram.Presenters
 {
     public class MainPresenter : IDisposable
     {
-        private readonly IMainForm _view;
+        public readonly IMainForm View;
+
         private readonly IDataBaseRepository _repository;
         private readonly ILogger _logger;
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        private System.Timers.Timer _autoRefreshTimer;
+        private System.Windows.Forms.Timer _autoRefreshTimer;
 
         private int _startIdInitializeMainPlot = 0;
-        
-        public MainPresenter(IMainForm view, IDataBaseRepository repository, ILogger logger)
+
+        private bool _disposed = false;
+
+        public MainPresenter(IMainForm view,IDataBaseRepository repository, ILogger logger)
         {
-            _view = view ?? throw new ArgumentNullException(nameof(view));
+            this.View = view ?? throw new ArgumentNullException(nameof(view));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             //Подписка на события View
-            _view.FormLoaded += OnFormLoaded;
-            _view.PlotSelected += OnPlotSelected;
-            _view.CancelRequested += OnCancelRequested;
+            this.View.FormLoaded += OnFormLoaded;
+            this.View.PlotSelected += OnPlotSelected;
+            this.View.CancelRequested += OnCancelRequested;
         }
 
         private void OnFormLoaded(object sender, EventArgs e)
@@ -44,7 +47,7 @@ namespace Diagram.Presenters
             {
                 var error = "Операция отменена";
                 _logger.Warn(error);
-                _view.ShowErrorMessage(error);
+                View.ShowErrorMessage(error);
             }
         }
 
@@ -59,7 +62,7 @@ namespace Diagram.Presenters
             {
                 var error = "Операция отменена";
                 _logger.Warn(error);
-                _view.ShowErrorMessage(error);
+                View.ShowErrorMessage(error);
             }
 
         }
@@ -68,10 +71,10 @@ namespace Diagram.Presenters
         {
             try
             {
-                _view.ShowProgressIndicator();
+                View.ShowProgressIndicator();
                 IProgress<int> progress = new Progress<int>(percent =>
                 {
-                    _view.UpdateProgress(percent);
+                    View.UpdateProgress(percent);
                 });
 
                 var graphIds = await _repository.GetAllGraphIdsAsync(token).ConfigureAwait(false);
@@ -93,19 +96,21 @@ namespace Diagram.Presenters
                 }
 
                 miniPlotData = SortMiniPlots(miniPlotData);
-                _view.DisplayMiniPlots(miniPlotData);
+                View.DisplayMiniPlots(miniPlotData);
             }
             catch (OperationCanceledException)
             {
                 var error = "Операция отменена";
                 _logger.Warn(error);
-                _view.ShowErrorMessage(error);
+                View.ShowErrorMessage(error);
+                throw;
             }
             catch (Exception ex)
             {
                 var error = $"Ошибка загрузки данных: {ex.Message}";
                 _logger.Error(error);
-                _view.ShowErrorMessage(error);
+                View.ShowErrorMessage(error);
+                throw;
             }
         }
 
@@ -118,26 +123,25 @@ namespace Diagram.Presenters
         {
             try
             {
-                _autoRefreshTimer = new System.Timers.Timer(5000);
+                _autoRefreshTimer = new System.Windows.Forms.Timer();
+                _autoRefreshTimer.Interval = 50000;
 
-                _autoRefreshTimer.Elapsed += async (sender, arhs) =>
+                _autoRefreshTimer.Tick += async (sender, arhs) =>
                 {
                     await LoadMiniPlotsAsync(_cts.Token);
                     await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
                 };
-
-                _autoRefreshTimer.AutoReset = true;
-                _autoRefreshTimer.Enabled = true;
+                _autoRefreshTimer.Start();
             }
             catch (Exception ex)
             {
                 var error = $"Ошибка инициализации графика: {ex.Message}";
                 _logger.Error(error);
-                _view.ShowErrorMessage(error);
+                View.ShowErrorMessage(error);
             }
             finally
             {
-                _view.HideProgressIndicator();
+                View.HideProgressIndicator();
             }
         }
 
@@ -149,11 +153,11 @@ namespace Diagram.Presenters
 
                 var xValues = await _repository.GetValuesAsync(plotId, token);
                 var yTimes = await _repository.GetTimesAsync(plotId, token);
-                _view.UpdateMainPlot(plotId, xValues, yTimes);
+                View.UpdateMainPlot(plotId, xValues, yTimes);
             }
             catch (Exception ex)
             {
-                _view.ShowErrorMessage($"Ошибка обновления графика: {ex.Message}");
+                View.ShowErrorMessage($"Ошибка обновления графика: {ex.Message}");
             }
         }
 
@@ -164,15 +168,28 @@ namespace Diagram.Presenters
 
         public void Dispose()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-            _autoRefreshTimer?.Stop();
-            _autoRefreshTimer?.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
 
-            _view.FormLoaded -= OnFormLoaded;
-            _view.PlotSelected -= OnPlotSelected;
-            _view.CancelRequested -= OnCancelRequested;
+            if (disposing)
+            {
+                _cts?.Cancel();
+                _cts?.Dispose();
+
+                _autoRefreshTimer?.Stop();
+                _autoRefreshTimer?.Dispose();
+
+                View.FormLoaded -= OnFormLoaded;
+                View.PlotSelected -= OnPlotSelected;
+                View.CancelRequested -= OnCancelRequested;
+            }
+
+            _disposed = true;
         }
     }
 }

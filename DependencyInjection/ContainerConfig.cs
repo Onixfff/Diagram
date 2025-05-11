@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Diagram.DataAccess;
 using Diagram.Forms;
+using Diagram.Interfaces;
 using Diagram.Presenters;
 using NLog;
 using System.Configuration;
@@ -13,7 +14,7 @@ namespace Diagram.DependencyInjection
         {
             var builder = new ContainerBuilder();
 
-            string connectionString = ConfigurationManager.ConnectionStrings["ConnLocal"]?.ConnectionString;
+            string connectionString = Properties.Resources.connLocal;
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
@@ -31,13 +32,14 @@ namespace Diagram.DependencyInjection
                 .WithParameter("connectionString", connectionString)
                 .InstancePerLifetimeScope();
 
-            //Presenter
-            builder.RegisterType<MainPresenter>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            //View
+            // View
             builder.RegisterType<MainForm>()
+                   .As<IMainForm>()
+                   .PropertiesAutowired()
+                   .InstancePerLifetimeScope();
+
+            //presenter 
+            builder.RegisterType<MainPresenter>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
