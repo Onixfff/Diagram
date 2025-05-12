@@ -32,7 +32,6 @@ namespace Diagram.Forms
         {
             _dataBaseRepository = dataBaseRepository;
             _logger = logger;
-
             InitializeComponent();
         }
 
@@ -65,6 +64,9 @@ namespace Diagram.Forms
             formsPlotMain.Plot.Clear();
             formsPlotMain.Plot.Title(plotId.ToString());
             formsPlotMain.Plot.Add.Scatter(xValues.ToArray(), yTimes.ToArray());
+            
+            MouseTracker(formsPlotMain);
+            
             formsPlotMain.Refresh();
         }
 
@@ -153,6 +155,35 @@ namespace Diagram.Forms
         {
             _logger.Warn($"вызвана ошибка {message}" );
             MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void MouseTracker(FormsPlot plot)
+        {
+            Crosshair CH;
+
+            CH = plot.Plot.Add.Crosshair(0, 0);
+            CH.TextColor = Colors.White;
+            CH.TextBackgroundColor = CH.HorizontalLine.Color;
+
+            plot.Refresh();
+
+            plot.MouseMove += (s, e) =>
+            {
+                Pixel mousePixel = new Pixel(e.X, e.Y);
+                Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+                this.Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
+                CH.Position = mouseCoordinates;
+                CH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
+                CH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
+                plot.Refresh();
+            };
+
+            plot.MouseDown += (s, e) =>
+            {
+                Pixel mousePixel = new Pixel(e.X, e.Y);
+                Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+                Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3} (mouse down)";
+            };
         }
     }
 }
