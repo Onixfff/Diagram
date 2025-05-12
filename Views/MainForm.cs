@@ -25,6 +25,8 @@ namespace Diagram.Forms
         private readonly ILogger _logger;
         private readonly IDataBaseRepository _dataBaseRepository;
 
+        private Crosshair _cH;
+
         //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
 
@@ -32,12 +34,22 @@ namespace Diagram.Forms
         {
             _dataBaseRepository = dataBaseRepository;
             _logger = logger;
+
             InitializeComponent();
+
+            formsPlotMain.MouseMove += Plot_MouseMove;
+            formsPlotMain.MouseDown += Plot_MouseDown;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             FormLoaded?.Invoke(this, EventArgs.Empty);
+            
+            InitializeMouseTracker(formsPlotMain);
+            ChangeViewBackground(formsPlotMain);
+
+            formsPlotMain.MouseMove += Plot_MouseMove;
+            formsPlotMain.MouseDown += Plot_MouseDown;
         }
 
         public void DisplayMiniPlots(IEnumerable<MiniPlotData> plots)
@@ -63,10 +75,13 @@ namespace Diagram.Forms
         {
             formsPlotMain.Plot.Clear();
             formsPlotMain.Plot.Title(plotId.ToString());
+            formsPlotMain.Plot.YLabel("Value");
+            formsPlotMain.Plot.XLabel("Time");
             formsPlotMain.Plot.Add.Scatter(xValues.ToArray(), yTimes.ToArray());
-            
-            MouseTracker(formsPlotMain);
-            
+
+            InitializeMouseTracker(formsPlotMain);
+
+            formsPlotMain.scal;
             formsPlotMain.Refresh();
         }
 
@@ -117,8 +132,11 @@ namespace Diagram.Forms
             formsPlot.Plot.XLabel("Time");
             formsPlot.Plot.Title(idFormPort.ToString());
             formsPlot.DoubleClick += LeftFormsPlot_DoubleClick;
+            
+            ChangeViewBackground(formsPlot);
 
             flowLayoutPanel1.Controls.Add(formsPlot);
+
             AddMarkers(formsPlot, xValue, yTime);
         }
 
@@ -157,33 +175,66 @@ namespace Diagram.Forms
             MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void MouseTracker(FormsPlot plot)
+        private void InitializeMouseTracker(FormsPlot plot)
         {
-            Crosshair CH;
-
-            CH = plot.Plot.Add.Crosshair(0, 0);
-            CH.TextColor = Colors.White;
-            CH.TextBackgroundColor = CH.HorizontalLine.Color;
+            _cH = plot.Plot.Add.Crosshair(0, 0);
+            _cH.TextColor = Colors.White;
+            _cH.TextBackgroundColor = _cH.HorizontalLine.Color;
 
             plot.Refresh();
+        }
 
-            plot.MouseMove += (s, e) =>
-            {
-                Pixel mousePixel = new Pixel(e.X, e.Y);
-                Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
-                this.Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
-                CH.Position = mouseCoordinates;
-                CH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
-                CH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
-                plot.Refresh();
-            };
+        private void Plot_MouseDown(object sender, MouseEventArgs e)
+        {
+            FormsPlot plot = sender as FormsPlot;
 
-            plot.MouseDown += (s, e) =>
+            Pixel mousePixel = new Pixel(e.X, e.Y);
+            Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+            Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3} (mouse down)";
+        }
+
+        private void Plot_MouseMove(object sender, MouseEventArgs e)
+        {
+            FormsPlot plot = sender as FormsPlot;
+
+            Pixel mousePixel = new Pixel(e.X, e.Y);
+            Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+            this.Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
+            _cH.Position = mouseCoordinates;
+            _cH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
+            _cH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
+            plot.Refresh();
+        }
+
+        private void ChangeViewBackground(FormsPlot plot)
+        {
+            plot.Plot.Add.Palette = new ScottPlot.Palettes.Penumbra();
+
+            // change figure colors
+            plot.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#181818");
+            plot.Plot.DataBackground.Color = ScottPlot.Color.FromHex("#1f1f1f");
+
+            // change axis and grid colors
+            plot.Plot.Axes.Color(ScottPlot.Color.FromHex("#d7d7d7"));
+            plot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#404040");
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            //Отписка от событий
+            formsPlotMain.MouseMove -= Plot_MouseMove;
+            formsPlotMain.MouseDown -= Plot_MouseDown;
+
+            //Очиска графиков и освобождение ресурсов
+            formsPlotMain.Plot.Clear();
+            formsPlotMain.Dispose();
+
+            foreach (FormsPlot item in flowLayoutPanel1.Controls)
             {
-                Pixel mousePixel = new Pixel(e.X, e.Y);
-                Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
-                Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3} (mouse down)";
-            };
+                item.Dispose();
+            }
+
+            base.OnFormClosed(e);
         }
     }
 }
