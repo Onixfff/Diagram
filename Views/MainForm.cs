@@ -1,6 +1,8 @@
 ﻿using Diagram.DataAccess;
 using Diagram.Interfaces;
 using NLog;
+using ScottPlot.Plottables;
+using ScottPlot;
 using ScottPlot.WinForms;
 using System;
 using System.Collections.Generic;
@@ -127,10 +129,13 @@ namespace Diagram.Forms
                 throw new ArgumentException(error);
             }
 
-            for (int i = 0; i < xValues.Count; i++)
-            {
-                plot.Plot.Add.Marker(xValues[i], yValues[i]);
-            }
+            var scatter = plot.Plot.Add.Scatter(xValues, yValues);
+
+            scatter.MarkerColor = new ScottPlot.Color(color: System.Drawing.Color.Red);
+            scatter.MarkerSize = 11.5f;
+            scatter.LineWidth = 3;
+            scatter.LinePattern = LinePattern.DenselyDashed;
+            scatter.MarkerShape = MarkerShape.FilledDiamond;
         }
 
         public void UpdateProgress(int progressPercentage)
