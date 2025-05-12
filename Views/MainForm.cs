@@ -81,7 +81,8 @@ namespace Diagram.Forms
 
             InitializeMouseTracker(formsPlotMain);
 
-            formsPlotMain.scal;
+            // Включаем автошкалирование
+            formsPlotMain.Plot.Axes.AutoScale();
             formsPlotMain.Refresh();
         }
 
@@ -156,6 +157,9 @@ namespace Diagram.Forms
             scatter.LineWidth = 3;
             scatter.LinePattern = LinePattern.DenselyDashed;
             scatter.MarkerShape = MarkerShape.FilledDiamond;
+
+            // Включаем автошкалирование
+            plot.Plot.Axes.AutoScale();
         }
 
         public void UpdateProgress(int progressPercentage)
