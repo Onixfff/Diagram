@@ -82,7 +82,6 @@ namespace Diagram.Forms
             InitializeMouseTracker(formsPlotMain);
 
             // Включаем автошкалирование
-            formsPlotMain.Plot.Axes.AutoScale();
             formsPlotMain.Refresh();
         }
 
@@ -112,6 +111,7 @@ namespace Diagram.Forms
             }
 
             PlotSelected?.Invoke(this, idFormPlot);
+            formsPlotMain.Plot.Axes.AutoScale();
         }
 
         private void CreatesMiniPlot(int idFormPort, List<float> xValue, List<int> yTime)
