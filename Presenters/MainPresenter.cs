@@ -52,6 +52,13 @@ namespace Diagram.Presenters
                 _logger.Warn(error);
                 View.ShowErrorMessage(error);
             }
+            catch (Exception ex)
+            {
+                var error = "Неизвестная ошибка";
+                _logger.Error(error + "\n" + ex.Message);
+                _cts.Cancel();
+                View.ShowErrorMessage(error);
+            }
         }
 
         private async void OnPlotSelected(object sender, int plotId)
@@ -127,7 +134,7 @@ namespace Diagram.Presenters
             try
             {
                 _autoRefreshTimer = new System.Windows.Forms.Timer();
-                _autoRefreshTimer.Interval = 50000;
+                _autoRefreshTimer.Interval = 10000;
 
                 _autoRefreshTimer.Tick += async (sender, arhs) =>
                 {
