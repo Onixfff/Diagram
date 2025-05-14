@@ -14,7 +14,7 @@ namespace Diagram.DependencyInjection
         {
             var builder = new ContainerBuilder();
 
-            string connectionString = Properties.Resources.connLocal;
+            string connectionString = Properties.Resources.connServer;
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
