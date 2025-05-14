@@ -21,9 +21,13 @@ namespace Diagram.DataAccess
 
         public async Task<GraphDataPointDTO> GetLastBatchNumberInGraphAsync(int idGraph, CancellationToken token)
         {
-            //TODO Добавить sql на GetLastBatchNumberInGraphAsync
-            string sql = "@" +
-                "";
+            string sql = @"
+                SELECT MAX(d.BatchNumber) AS MaxBatchNumber
+                FROM diagramrooms.datapoints AS d
+                INNER JOIN diagramrooms.graph AS g
+                    ON d.IdGraph = g.IdGraph
+                WHERE g.IdGraph = @IdGraph;
+                ";
 
             try
             {
@@ -37,10 +41,10 @@ namespace Diagram.DataAccess
                     {
                         GraphDataPointDTO graphDataPointDTO = null;
 
+                        command.Parameters.AddWithValue("@IdGraph", idGraph);
+                        
                         using (var reader = await command.ExecuteReaderAsync(token))
                         {
-                            command.Parameters.AddWithValue("@IdGraph", idGraph);
-
                             token.ThrowIfCancellationRequested();
 
                             while (await reader.ReadAsync(token))
