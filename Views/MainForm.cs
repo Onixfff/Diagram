@@ -212,7 +212,7 @@ namespace Diagram.Forms
 
         private void ChangeViewBackground(FormsPlot plot)
         {
-            plot.Plot.Add.Palette = new ScottPlot.Palettes.Penumbra();
+            plot.Plot.Add.Palette = new ScottPlot.Palettes.Category10();
 
             // change figure colors
             plot.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#181818");
@@ -240,5 +240,6 @@ namespace Diagram.Forms
 
             base.OnFormClosed(e);
         }
+
     }
 }
