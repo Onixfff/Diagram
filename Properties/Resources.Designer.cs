@@ -61,11 +61,20 @@ namespace Diagram.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Database=diagramrooms; Server=192.168.100.100; port=3306; username=D_user; password=Aeroblock12345%; charset=utf8.
+        ///   Ищет локализованную строку, похожую на Database=diagramrooms; Server=localhost; port=3306; username=root; password=12345; charset=utf8.
         /// </summary>
         internal static string connLocal {
             get {
                 return ResourceManager.GetString("connLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Database=diagramrooms; Server=192.168.100.100; port=3306; username=D_user; password=Aeroblock12345%; charset=utf8.
+        /// </summary>
+        internal static string connServer {
+            get {
+                return ResourceManager.GetString("connServer", resourceCulture);
             }
         }
     }

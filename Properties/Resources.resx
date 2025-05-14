@@ -121,4 +121,8 @@
     <value>Database=diagramrooms; Server=localhost; port=3306; username=root; password=12345; charset=utf8</value>
     <comment>Тестовая строка подключения</comment>
   </data>
+  <data name="connServer" xml:space="preserve">
+    <value>Database=diagramrooms; Server=192.168.100.100; port=3306; username=D_user; password=Aeroblock12345%; charset=utf8</value>
+    <comment>Сервер</comment>
+  </data>
 </root>
