@@ -134,7 +134,7 @@ namespace Diagram.Presenters
             try
             {
                 _autoRefreshTimer = new System.Windows.Forms.Timer();
-                _autoRefreshTimer.Interval = 10000;
+                _autoRefreshTimer.Interval = 60000;
 
                 _autoRefreshTimer.Tick += async (sender, arhs) =>
                 {

@@ -77,7 +77,7 @@ namespace Diagram.Forms
             formsPlotMain.Plot.Title(plotId.ToString());
             formsPlotMain.Plot.YLabel("Value");
             formsPlotMain.Plot.XLabel("Time");
-            formsPlotMain.Plot.Add.Scatter(xValues.ToArray(), yTimes.ToArray());
+            formsPlotMain.Plot.Add.Scatter(yTimes.ToArray(), xValues.ToArray());
 
             InitializeMouseTracker(formsPlotMain);
 
@@ -151,7 +151,7 @@ namespace Diagram.Forms
                 throw new ArgumentException(error);
             }
 
-            var scatter = plot.Plot.Add.Scatter(xValues, yValues);
+            var scatter = plot.Plot.Add.Scatter(yValues, xValues);
 
             scatter.MarkerColor = new ScottPlot.Color(color: System.Drawing.Color.Red);
             scatter.MarkerSize = 11.5f;
