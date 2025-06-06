@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Diagram.DataAccess;
-using Diagram.Forms;
 using Diagram.Interfaces;
 using Diagram.Presenters;
 using NLog;
 using System.Configuration;
+using Diagram.Views;
 
 namespace Diagram.DependencyInjection
 {

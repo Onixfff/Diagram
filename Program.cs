@@ -1,9 +1,9 @@
-﻿using Autofac;
-using Diagram.DependencyInjection;
-using Diagram.Forms;
+﻿using System;
+using Autofac;
+using Diagram.Views;
 using Diagram.Presenters;
-using System;
 using System.Windows.Forms;
+using Diagram.DependencyInjection;
 
 namespace Diagram
 {

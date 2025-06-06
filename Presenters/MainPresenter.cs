@@ -1,11 +1,11 @@
-﻿using Diagram.DataAccess;
-using Diagram.Interfaces;
-using NLog;
+﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Diagram.Interfaces;
+using Diagram.DataAccess;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Diagram.Presenters
 {

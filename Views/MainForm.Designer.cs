@@ -1,4 +1,4 @@
-﻿namespace Diagram.Forms
+﻿namespace Diagram.Views
 {
     partial class MainForm
     {

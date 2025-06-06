@@ -1,20 +1,20 @@
-﻿using Diagram.DataAccess;
-using Diagram.Interfaces;
-using NLog;
-using ScottPlot.Plottables;
-using ScottPlot;
-using ScottPlot.WinForms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Diagram.DataAccess;
+using Diagram.Interfaces;
+using NLog;
+using ScottPlot;
+using ScottPlot.Plottables;
+using ScottPlot.WinForms;
 
 //TODO Решить проблему с Хранением данных в Presenter (там не должны храниться данные) так-как они могут не совпадать с ui или бд. Лучше хранить данные уж в ui
 //TODO Переписать работу с левой частью по созданию мини графиков в универсальный UserControl
 //TODO Организовать для левой части ленивую загрузку ну или посмотреть нужно ли это
 //TODO Добавить progressbar и background worker ну или посмотреть нужно ли это
 
-namespace Diagram.Forms
+namespace Diagram.Views
 {
     public partial class MainForm : Form, IDisposable, IMainForm
     {
@@ -23,16 +23,14 @@ namespace Diagram.Forms
         public event EventHandler CancelRequested;
 
         private readonly ILogger _logger;
-        private readonly IDataBaseRepository _dataBaseRepository;
 
         private Crosshair _cH;
 
         //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
 
-        public MainForm(IDataBaseRepository dataBaseRepository, ILogger logger)
+        public MainForm(ILogger logger)
         {
-            _dataBaseRepository = dataBaseRepository;
             _logger = logger;
 
             InitializeComponent();
