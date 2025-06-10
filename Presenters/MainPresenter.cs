@@ -6,6 +6,7 @@ using Diagram.Interfaces;
 using Diagram.DataAccess;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Diagram.ExceptionData;
 
 namespace Diagram.Presenters
 {
@@ -40,10 +41,17 @@ namespace Diagram.Presenters
             {
                 _cts?.Cancel();
                 _cts = new CancellationTokenSource();
+                
+                try
+                {
+                    await LoadMiniPlotsAsync(_cts.Token, true);
+                }
+                catch (Exception ex)
+                {
+                    //ignored
+                }
 
-                await LoadMiniPlotsAsync(_cts.Token, true);
                 await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
-
                 InitializePlotsAutoRefresh(_cts.Token);
             }
             catch(OperationCanceledException)
@@ -82,13 +90,10 @@ namespace Diagram.Presenters
             try
             {
                 View.ShowProgressIndicator(showProgress);
-                IProgress<int> progress = new Progress<int>(percent =>
-                {
-                    View.UpdateProgress(percent);
-                });
+                IProgress<int> progress = new Progress<int>(percent => { View.UpdateProgress(percent); });
 
                 var graphIds = await _repository.GetAllGraphIdsAsync(token).ConfigureAwait(false);
-                
+
                 var miniPlotData = new List<MiniPlotData>();
                 int total = graphIds.Count + 1;
                 int current = 0;
@@ -113,14 +118,18 @@ namespace Diagram.Presenters
                 var error = "Операция отменена";
                 _logger.Warn(error);
                 View.ShowErrorMessage(error);
-                throw;
+            }
+            catch (ExceptionRepository ex)
+            {
+                var error = $"Ошибка получения данных для мини диаграмм: {ex.Message}";
+                _logger.Error(error);
+                View.ShowErrorMessage(error);
             }
             catch (Exception ex)
             {
                 var error = $"Ошибка загрузки данных: {ex.Message}";
                 _logger.Error(error);
                 View.ShowErrorMessage(error);
-                throw;
             }
         }
 
