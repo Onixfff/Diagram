@@ -122,15 +122,34 @@ namespace Diagram.DataAccess
             {
                 string error = $"Непредвиденная ошибка IdGraph={idGraph}.\nМесто ошибки - {ex.InnerException}";
                 _logger.Error(ex, error);
-                throw new ExceptionRepository(ex, error);
+                throw;
             }
         }
 
         /// <summary>
-        /// 
+        /// Асинхронно получает список всех идентификаторов графиков (IdGraph) из таблицы Graph.
         /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список целочисленных идентификаторов графиков.</returns>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение IdGraph в базе данных равно NULL.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение IdGraph невозможно преобразовать к типу int.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос: <c>SELECT IdGraph FROM Graph ORDER BY IdGraph;</c>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         public async Task<List<int>> GetAllGraphIdsAsync(CancellationToken token)
         {
             string sql = "SELECT IdGraph FROM Graph ORDER BY IdGraph;";
@@ -160,13 +179,13 @@ namespace Diagram.DataAccess
                                 if (result == DBNull.Value || result == null)
                                 {
                                     _logger.Warn($"Поле {nameof(result)} == null");
-                                    throw new InvalidOperationException($"Поле {nameof(result)} == null");
+                                    throw new ExceptionRepository(new InvalidOperationException(),$"Поле {nameof(result)} == null");
                                 }
 
                                 if (!(result is int idGraph))
                                 {
                                     _logger.Error($"Неверное преобразование {nameof(idGraph)} из БД. Значение: {result}");
-                                    throw new InvalidCastException($"Неверный тип данных для {nameof(idGraph)}");
+                                    throw new ExceptionRepository(new InvalidCastException(), $"Неверный тип данных для {nameof(idGraph)}");
                                 }
 
                                 graphIds.Add(idGraph);
@@ -175,7 +194,7 @@ namespace Diagram.DataAccess
                             if(graphIds == null)
                             {
                                 _logger.Error($"Список {nameof(graphIds)} полученный из бд == null");
-                                throw new NullReferenceException($"Список {nameof(graphIds)} полученный из бд == null");
+                                throw new ExceptionRepository(new NullReferenceException(), $"Список {nameof(graphIds)} полученный из бд == null");
                             }
 
                             _logger.Info("Операция GetAllGraphIdsAsync выполнена");
@@ -191,12 +210,14 @@ namespace Diagram.DataAccess
             }
             catch (MySqlException ex)
             {
-                _logger.Error(ex, "Ошибка со стороны базы данных");
-                throw;
+                string error = "Ошибка с базы данных";
+                _logger.Error(ex, error);
+                throw new ExceptionRepository(ex, error);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Непредвиденная ошибка");
+                string error = "Непредвиденная ошибка";
+                _logger.Error(ex, error);
                 throw;
             }
         }

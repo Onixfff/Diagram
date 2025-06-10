@@ -32,8 +32,37 @@ namespace Diagram.DataAccess
         /// Все ошибки логируются через <see cref="_logger"/>.
         /// </remarks>
         Task<GraphDataPointDTO> GetLastBatchNumberInGraphAsync(int IdGraph, CancellationToken token);
+
+        /// <summary>
+        /// Асинхронно получает список всех идентификаторов графиков (IdGraph) из таблицы Graph.
+        /// </summary>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список целочисленных идентификаторов графиков.</returns>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение IdGraph в базе данных равно NULL.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение IdGraph невозможно преобразовать к типу int.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос: <c>SELECT IdGraph FROM Graph ORDER BY IdGraph;</c>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         Task<List<int>> GetAllGraphIdsAsync(CancellationToken token);
+        
+
         Task<List<float>> GetValuesAsync(int idGraph, CancellationToken token);
+        
+
         Task<List<int>> GetTimesAsync(int idGraph, CancellationToken token);
     }
 }
