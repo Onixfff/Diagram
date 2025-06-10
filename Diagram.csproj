@@ -161,6 +161,7 @@
     <Compile Include="DataAccess\IDataBaseRepository.cs" />
     <Compile Include="DependencyInjection\ContainerConfig.cs" />
     <Compile Include="DTO\GraphDataPointDTO.cs" />
+    <Compile Include="ExceptionData\ExceptionRepository.cs" />
     <Compile Include="Interfaces\IMainForm.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Views\MainForm.cs">
