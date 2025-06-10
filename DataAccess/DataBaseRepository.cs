@@ -1,10 +1,12 @@
 ﻿using Diagram.DTO;
+using Diagram.ExceptionData;
 using MySql.Data.MySqlClient;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ZstdSharp;
 
 namespace Diagram.DataAccess
 {
@@ -19,15 +21,43 @@ namespace Diagram.DataAccess
             _logger = logger;
         }
 
+        /// <summary>
+        /// Асинхронно получает данные последней партии для указанного графика из базы данных.
+        /// </summary>
+        /// <param name="idGraph">Уникальный идентификатор графика, для которого запрашиваются данные.</param>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Объект <see cref="GraphDataPointDTO"/>, содержащий информацию о последней партии.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Возникает, если не удалось получить данные по указанному графику (возвращено null).
+        /// </exception>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана пользователем или системой через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных (например, сетевые проблемы, синтаксические ошибки в запросе).
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках во время выполнения операции.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос к таблицам <c>diagramrooms.datapoints</c> и <c>diagramrooms.graph</c>,
+        /// выбирая последнюю запись по максимальному номеру партии (<see cref="BatchNumber"/>).
+        /// Если данные не найдены, выбрасывается исключение с типом <see cref="ArgumentNullException"/>.
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         public async Task<GraphDataPointDTO> GetLastBatchNumberInGraphAsync(int idGraph, CancellationToken token)
         {
-            string sql = @"
-                SELECT MAX(d.BatchNumber) AS MaxBatchNumber
-                FROM diagramrooms.datapoints AS d
-                INNER JOIN diagramrooms.graph AS g
-                    ON d.IdGraph = g.IdGraph
-                WHERE g.IdGraph = @IdGraph;
-                ";
+            string sql = "@" +
+                         "SELECT" +
+                         "d.PointDateTime," +
+                         "d.Value," +
+                         "d.Time," +
+                         "d.BatchNumber" +
+                         "FROM diagramrooms.datapoints d" +
+                         "INNER JOIN diagramrooms.graph g ON d.IdGraph = g.IdGraph" +
+                         "WHERE g.IdGraph = @IdGraph" +
+                         "ORDER BY d.BatchNumber DESC" +
+                         "LIMIT 1";
 
             try
             {
@@ -67,7 +97,7 @@ namespace Diagram.DataAccess
                             if (graphDataPointDTO == null)
                             {
                                 _logger.Error($"{nameof(graphDataPointDTO)} имеет на выходе null значение");
-                                throw new ArgumentNullException(nameof(graphDataPointDTO));
+                                throw new ExceptionRepository(new ArgumentNullException(),nameof(graphDataPointDTO));
                             }
                             else
                             {
@@ -84,16 +114,23 @@ namespace Diagram.DataAccess
             }
             catch (MySqlException ex)
             {
-                _logger.Error(ex, $"Ошибка MySQL для IdGraph={idGraph}. Код ошибки: {ex.Number}.\nМесто ошибки - {ex.InnerException}");
-                throw;
+                string error = $"Ошибка MySQL для IdGraph={idGraph}. Код ошибки: {ex.Number}.\nМесто ошибки - {ex.InnerException}";
+                _logger.Error(ex, error);
+                throw new ExceptionRepository(ex, error);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Непредвиденная ошибка IdGraph={idGraph}.\nМесто ошибки - {ex.InnerException}");
-                throw;
+                string error = $"Непредвиденная ошибка IdGraph={idGraph}.\nМесто ошибки - {ex.InnerException}";
+                _logger.Error(ex, error);
+                throw new ExceptionRepository(ex, error);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public async Task<List<int>> GetAllGraphIdsAsync(CancellationToken token)
         {
             string sql = "SELECT IdGraph FROM Graph ORDER BY IdGraph;";
