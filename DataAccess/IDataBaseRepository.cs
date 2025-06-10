@@ -58,11 +58,69 @@ namespace Diagram.DataAccess
         /// Все ошибки логируются через <see cref="_logger"/>.
         /// </remarks>
         Task<List<int>> GetAllGraphIdsAsync(CancellationToken token);
-        
 
+        /// <summary>
+        /// Асинхронно получает список значений (Value) для указанного графика с последней партией (BatchNumber) из базы данных.
+        /// </summary>
+        /// <param name="idGraph">Уникальный идентификатор графика.</param>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список числовых значений типа float.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение поля Value равно NULL в базе данных.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение поля Value невозможно преобразовать к типу float.
+        /// </exception>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос, выбирающий все значения поля Value для последней партии указанного графика:
+        /// <code>
+        /// SELECT Value FROM datapoints 
+        /// WHERE idGraph = @IdGraph 
+        /// AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)
+        /// </code>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         Task<List<float>> GetValuesAsync(int idGraph, CancellationToken token);
-        
 
+        /// <summary>
+        /// Асинхронно получает список временных меток (Time) для указанного графика с последней партией (BatchNumber) из базы данных.
+        /// </summary>
+        /// <param name="idGraph">Уникальный идентификатор графика.</param>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список целочисленных временных значений.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение поля Time равно NULL в базе данных.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение поля Time невозможно преобразовать к типу int.
+        /// </exception>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос, выбирающий все значения поля Time для последней партии указанного графика:
+        /// <code>
+        /// SELECT Time FROM datapoints 
+        /// WHERE idGraph = @IdGraph 
+        /// AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)
+        /// </code>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         Task<List<int>> GetTimesAsync(int idGraph, CancellationToken token);
     }
 }

@@ -222,6 +222,36 @@ namespace Diagram.DataAccess
             }
         }
 
+        /// <summary>
+        /// Асинхронно получает список значений (Value) для указанного графика с последней партией (BatchNumber) из базы данных.
+        /// </summary>
+        /// <param name="idGraph">Уникальный идентификатор графика.</param>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список числовых значений типа float.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение поля Value равно NULL в базе данных.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение поля Value невозможно преобразовать к типу float.
+        /// </exception>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос, выбирающий все значения поля Value для последней партии указанного графика:
+        /// <code>
+        /// SELECT Value FROM datapoints 
+        /// WHERE idGraph = @IdGraph 
+        /// AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)
+        /// </code>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         public async Task<List<float>> GetValuesAsync(int idGraph, CancellationToken token)
         {
             string sql = "SELECT Value FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)";
@@ -251,13 +281,15 @@ namespace Diagram.DataAccess
                                 if (result == DBNull.Value || result == null)
                                 {
                                     _logger.Warn($"Поле {nameof(result)} == null");
-                                    throw new InvalidOperationException($"Поле {nameof(result)} == null");
+                                    throw new ExceptionRepository(new InvalidOperationException(),
+                                        $"Поле {nameof(result)} == null");
                                 }
 
                                 if (!(result is float value))
                                 {
+                                    string error = $"Неверный тип данных для {nameof(value)}";
                                     _logger.Error($"Неверное преобразование {nameof(value)} из БД. Значение: {result}");
-                                    throw new InvalidCastException($"Неверный тип данных для {nameof(value)}");
+                                    throw new ExceptionRepository(new InvalidCastException(), error);
                                 }
 
                                 valueDataPoints.Add(value);
@@ -282,17 +314,48 @@ namespace Diagram.DataAccess
             }
             catch (MySqlException ex)
             {
-                _logger.Error(ex, "Ошибка со стороны базы данных");
-                throw;
+                string error = "Ошибка со стороны базы данных";
+                _logger.Error(ex, error);
+                throw new ExceptionRepository(ex,error);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Непредвиденная ошибка");
+                string error = "Непредвиденная ошибка";
+                _logger.Error(ex, error);
                 throw;
             }
-
         }
 
+        /// <summary>
+        /// Асинхронно получает список временных меток (Time) для указанного графика с последней партией (BatchNumber) из базы данных.
+        /// </summary>
+        /// <param name="idGraph">Уникальный идентификатор графика.</param>
+        /// <param name="token">Токен отмены, используемый для прерывания операции при необходимости.</param>
+        /// <returns>Список целочисленных временных значений.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Возникает, если значение поля Time равно NULL в базе данных.
+        /// </exception>
+        /// <exception cref="InvalidCastException">
+        /// Возникает, если значение поля Time невозможно преобразовать к типу int.
+        /// </exception>
+        /// <exception cref="OperationCanceledException">
+        /// Возникает, если операция была прервана через токен отмены.
+        /// </exception>
+        /// <exception cref="MySqlException">
+        /// Возникает при ошибках взаимодействия с MySQL-базой данных.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Возникает при любых других непредвиденных ошибках.
+        /// </exception>
+        /// <remarks>
+        /// Метод выполняет SQL-запрос, выбирающий все значения поля Time для последней партии указанного графика:
+        /// <code>
+        /// SELECT Time FROM datapoints 
+        /// WHERE idGraph = @IdGraph 
+        /// AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph)
+        /// </code>
+        /// Все ошибки логируются через <see cref="_logger"/>.
+        /// </remarks>
         public async Task<List<int>> GetTimesAsync(int idGraph, CancellationToken token)
         {
             string sql = "SELECT Time FROM datapoints WHERE idGraph = @IdGraph AND BatchNumber = (SELECT MAX(BatchNumber) FROM datapoints WHERE idGraph = @IdGraph);";
@@ -321,14 +384,15 @@ namespace Diagram.DataAccess
 
                                 if (result == DBNull.Value || result == null)
                                 {
-                                    _logger.Warn($"Поле {nameof(result)} == null");
-                                    throw new InvalidOperationException($"Поле {nameof(result)} == null");
+                                    string error = $"Поле {nameof(result)} == null";
+                                    _logger.Warn(error);
+                                    throw new ExceptionRepository(new InvalidOperationException(), error);
                                 }
 
                                 if (!(result is int time))
                                 {
                                     _logger.Error($"Неверное преобразование {nameof(time)} из БД. Значение: {result}");
-                                    throw new InvalidCastException($"Неверный тип данных для {nameof(time)}");
+                                    throw new ExceptionRepository(new InvalidCastException(), $"Неверный тип данных для {nameof(time)}");
                                 }
 
                                 TimeDataPoints.Add(time);
@@ -336,8 +400,9 @@ namespace Diagram.DataAccess
 
                             if (TimeDataPoints == null)
                             {
-                                _logger.Error($"Список {nameof(TimeDataPoints)} полученный из бд == null");
-                                throw new NullReferenceException($"Список {nameof(TimeDataPoints)} полученный из бд == null");
+                                string errro = $"Список {nameof(TimeDataPoints)} полученный из бд == null";
+                                _logger.Error(errro);
+                                throw new ExceptionRepository(new NullReferenceException(), errro);
                             }
 
                             _logger.Info("Операция GetTimesAsunc выполнена");
@@ -353,8 +418,9 @@ namespace Diagram.DataAccess
             }
             catch (MySqlException ex)
             {
-                _logger.Error(ex, "Ошибка со стороны базы данных");
-                throw;
+                string errro = "Ошибка со стороны базы данных";
+                _logger.Error(ex, errro);
+                throw new ExceptionRepository(ex, errro);
             }
             catch (Exception ex)
             {
