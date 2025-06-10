@@ -45,14 +45,13 @@ namespace Diagram.Presenters
                 try
                 {
                     await LoadMiniPlotsAsync(_cts.Token, true);
+                    await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
+                    InitializePlotsAutoRefresh(_cts.Token);
                 }
                 catch (Exception ex)
                 {
                     //ignored
                 }
-
-                await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
-                InitializePlotsAutoRefresh(_cts.Token);
             }
             catch(OperationCanceledException)
             {
@@ -140,28 +139,16 @@ namespace Diagram.Presenters
 
         private void InitializePlotsAutoRefresh(CancellationToken token)
         {
-            try
-            {
-                _autoRefreshTimer = new System.Windows.Forms.Timer();
-                _autoRefreshTimer.Interval = 60000;
+            _autoRefreshTimer = new System.Windows.Forms.Timer();
+            _autoRefreshTimer.Interval = 60000;
 
-                _autoRefreshTimer.Tick += async (sender, arhs) =>
-                {
-                    await LoadMiniPlotsAsync(_cts.Token);
-                    await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
-                };
-                _autoRefreshTimer.Start();
-            }
-            catch (Exception ex)
+            _autoRefreshTimer.Tick += async (sender, arhs) =>
             {
-                var error = $"Ошибка инициализации графика: {ex.Message}";
-                _logger.Error(error);
-                View.ShowErrorMessage(error);
-            }
-            finally
-            {
-                View.ShowProgressIndicator(false);
-            }
+                await LoadMiniPlotsAsync(_cts.Token);
+                await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
+            };
+            _autoRefreshTimer.Start();
+            View.ShowProgressIndicator(false);
         }
 
         private async Task UpdateMainPlotAsync(int plotId, CancellationToken token)
@@ -174,9 +161,23 @@ namespace Diagram.Presenters
                 var yTimes = await _repository.GetTimesAsync(plotId, token);
                 View.UpdateMainPlot(plotId, xValues, yTimes);
             }
+            catch (OperationCanceledException)
+            {
+                string error = $"Отмена обновления для главного графика";
+                _logger.Warn(error);
+                View.ShowErrorMessage(error);
+            }
+            catch (ExceptionRepository ex)
+            {
+                string error = $"Ошибка получения данных для главного графика {ex.Message}";
+                _logger.Warn(error);
+                View.ShowErrorMessage(error);
+            }
             catch (Exception ex)
             {
-                View.ShowErrorMessage($"Ошибка обновления графика: {ex.Message}");
+                string errro = $"Ошибка обновления главного графика: {ex.Message}";
+                _logger.Error(errro);
+                View.ShowErrorMessage(errro);
             }
         }
 
