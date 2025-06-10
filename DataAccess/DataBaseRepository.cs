@@ -362,7 +362,5 @@ namespace Diagram.DataAccess
                 throw;
             }
         }
-
-        //TODO Создать метод доставки всех данных из всех idGraph и их DataPoints
     }
 }
