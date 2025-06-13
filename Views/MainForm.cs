@@ -14,7 +14,7 @@ using Color = System.Drawing.Color;
 
 namespace Diagram.Views
 {
-    public partial class MainForm : Form, IDisposable, IMainForm
+    public partial class MainForm : Form, IMainForm
     {
         private readonly ILogger _logger;
 
