@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using Diagram.Interfaces;
-using NLog;
+﻿using NLog;
+using System;
 using ScottPlot;
-using ScottPlot.Plottables;
+using System.Drawing;
+using Diagram.Interfaces;
 using ScottPlot.WinForms;
+using ScottPlot.Plottables;
+using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Diagram.Views
 {
