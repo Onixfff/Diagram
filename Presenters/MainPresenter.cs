@@ -133,9 +133,9 @@ namespace Diagram.Presenters
             }
         }
 
-        private List<MiniPlotData> SortMiniPlots(List<MiniPlotData> miniPlotDatas)
+        private List<MiniPlotData> SortMiniPlots(List<MiniPlotData> miniPlotData)
         {
-            return miniPlotDatas.OrderBy(x => x.Id).ToList();
+            return miniPlotData.OrderBy(x => x.Id).ToList();
         }
 
         private void InitializePlotsAutoRefresh(CancellationToken token)
@@ -143,10 +143,10 @@ namespace Diagram.Presenters
             _autoRefreshTimer = new System.Windows.Forms.Timer();
             _autoRefreshTimer.Interval = 60000;
 
-            _autoRefreshTimer.Tick += async (sender, arhs) =>
+            _autoRefreshTimer.Tick += async (sender, args) =>
             {
-                await LoadMiniPlotsAsync(_cts.Token);
-                await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
+                await LoadMiniPlotsAsync(token);
+                await UpdateMainPlotAsync(_startIdInitializeMainPlot, token);
             };
             _autoRefreshTimer.Start();
             View.ShowProgressIndicator(false);
