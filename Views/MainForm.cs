@@ -63,7 +63,6 @@ namespace Diagram.Views
 
             InitializeMouseTracker(formsPlotMain);
 
-            // Включаем автошкалирование
             formsPlotMain.Plot.Axes.AutoScale();
             formsPlotMain.Refresh();
         }
