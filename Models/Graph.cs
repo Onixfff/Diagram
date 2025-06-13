@@ -1,4 +1,4 @@
-﻿namespace Diagram.Models.Data
+﻿namespace Diagram.Models
 {
     internal class Graph
     {

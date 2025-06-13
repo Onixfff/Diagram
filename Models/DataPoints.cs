@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diagram.Models.Data
+namespace Diagram.Models
 {
     internal class DataPoints
     {

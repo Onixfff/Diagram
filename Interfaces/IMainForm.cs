@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Diagram.Models;
 
 namespace Diagram.Interfaces
 {
@@ -19,19 +20,5 @@ namespace Diagram.Interfaces
         void ShowProgressIndicator(bool show);
         void ShowErrorMessage(string message);
         void UpdateProgress(int progressPercentage);
-    }
-
-    public class MiniPlotData
-    {
-        public int Id;
-        public List<float> XValue { get; }
-        public List<int> YTime { get; }
-
-        public MiniPlotData(int id, List<float> xValue, List<int> yTime)
-        {
-            Id = id;
-            XValue = xValue ?? throw new ArgumentNullException(nameof(xValue));
-            YTime = yTime ?? throw new ArgumentNullException(nameof(yTime));
-        }
     }
 }

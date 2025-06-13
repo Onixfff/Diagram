@@ -164,6 +164,7 @@
     <Compile Include="ExceptionData\ExceptionRepository.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Interfaces\IMainForm.cs" />
+    <Compile Include="Models\MiniPlotData.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>

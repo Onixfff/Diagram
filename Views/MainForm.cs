@@ -7,6 +7,7 @@ using ScottPlot.WinForms;
 using ScottPlot.Plottables;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Diagram.Models;
 
 namespace Diagram.Views
 {
