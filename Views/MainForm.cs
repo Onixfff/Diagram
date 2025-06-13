@@ -8,11 +8,6 @@ using ScottPlot;
 using ScottPlot.Plottables;
 using ScottPlot.WinForms;
 
-//TODO Решить проблему с Хранением данных в Presenter (там не должны храниться данные) так-как они могут не совпадать с ui или бд. Лучше хранить данные уж в ui
-//TODO Переписать работу с левой частью по созданию мини графиков в универсальный UserControl
-//TODO Организовать для левой части ленивую загрузку ну или посмотреть нужно ли это
-//TODO Добавить progressbar и background worker ну или посмотреть нужно ли это
-
 namespace Diagram.Views
 {
     public partial class MainForm : Form, IDisposable, IMainForm
@@ -28,7 +23,6 @@ namespace Diagram.Views
 
         //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
-
 
         public MainForm(ILogger logger)
         {
