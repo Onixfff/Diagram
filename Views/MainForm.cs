@@ -14,7 +14,7 @@ using Color = System.Drawing.Color;
 
 namespace Diagram.Views
 {
-    public partial class MainForm : Form, IMainForm
+    public partial class MainForm : Form, IDisposable, IMainForm
     {
         private readonly ILogger _logger;
 
@@ -135,10 +135,10 @@ namespace Diagram.Views
             var formsPlot = new FormsPlot
             {
                 Size = _sizeFormPlot,
-                AutoScroll = true
+                AutoScroll = true,
+                Name = idFormPort.ToString(),
             };
 
-            formsPlot.Name = idFormPort.ToString();
             formsPlot.Plot.YLabel("Value");
             formsPlot.Plot.XLabel("Time");
             formsPlot.Plot.Title(idFormPort.ToString());
