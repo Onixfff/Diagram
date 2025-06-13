@@ -225,6 +225,7 @@ namespace Diagram.Views
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
+            CancelRequested?.Invoke(this,  e);
             formsPlotMain.MouseMove -= Plot_MouseMove;
             formsPlotMain.MouseDown -= Plot_MouseDown;
 
