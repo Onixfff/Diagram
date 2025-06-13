@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Diagram.DataAccess;
 using Diagram.Interfaces;
 using NLog;
 using ScottPlot;
@@ -25,9 +24,11 @@ namespace Diagram.Views
         private readonly ILogger _logger;
 
         private Crosshair _cH;
+        private readonly Dictionary<int, FormsPlot> contorlFormPlot = new Dictionary<int, FormsPlot>();
 
         //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
+
 
         public MainForm(ILogger logger)
         {
@@ -136,6 +137,7 @@ namespace Diagram.Views
             ChangeViewBackground(formsPlot);
 
             flowLayoutPanel1.Controls.Add(formsPlot);
+            contorlFormPlot.Add(idFormPort, formsPlot);
 
             AddMarkers(formsPlot, xValue, yTime);
         }
