@@ -10,6 +10,7 @@ using ScottPlot.Palettes;
 using ScottPlot.Plottables;
 using ScottPlot.WinForms;
 using Color = System.Drawing.Color;
+// ReSharper disable LocalizableElement
 
 namespace Diagram.Views
 {
@@ -18,7 +19,7 @@ namespace Diagram.Views
         private readonly ILogger _logger;
 
         private readonly Size _sizeFormPlot = new Size(355, 247);
-        private readonly Dictionary<int, FormsPlot> contorlFormPlot = new Dictionary<int, FormsPlot>();
+        private readonly Dictionary<int, FormsPlot> _contorlFormPlot = new Dictionary<int, FormsPlot>();
 
         private Crosshair _cH;
 
@@ -109,13 +110,12 @@ namespace Diagram.Views
         private void LeftFormsPlot_DoubleClick(object sender, EventArgs e)
         {
             var formPlot = (FormsPlot)sender;
-            int idFormPlot;
 
-            var isCompliteParse = int.TryParse(formPlot.Name, out idFormPlot);
+            var isCompleteParse = int.TryParse(formPlot.Name, out var idFormPlot);
 
-            if (isCompliteParse == false)
+            if (isCompleteParse == (int.TryParse(formPlot.Name, out idFormPlot) == false))
             {
-                var error = $"Неудалось преобразовать {nameof(formPlot.Name)} - {formPlot.Name} в int";
+                var error = $"Не удалось преобразовать {nameof(formPlot.Name)} - {formPlot.Name} в int";
                 _logger.Error(error);
                 throw new FormatException(error);
             }
@@ -147,7 +147,7 @@ namespace Diagram.Views
             ChangeViewBackground(formsPlot);
 
             flowLayoutPanel1.Controls.Add(formsPlot);
-            contorlFormPlot.Add(idFormPort, formsPlot);
+            _contorlFormPlot.Add(idFormPort, formsPlot);
 
             AddMarkers(formsPlot, xValue, yTime);
         }
@@ -186,6 +186,9 @@ namespace Diagram.Views
             var plot = sender as FormsPlot;
 
             var mousePixel = new Pixel(e.X, e.Y);
+            
+            if (plot == null) return;
+
             var mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
             Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3} (mouse down)";
         }
@@ -195,12 +198,16 @@ namespace Diagram.Views
             var plot = sender as FormsPlot;
 
             var mousePixel = new Pixel(e.X, e.Y);
-            var mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
-            Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
-            _cH.Position = mouseCoordinates;
-            _cH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
-            _cH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
-            plot.Refresh();
+            if (plot != null)
+            {
+                var mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+                Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
+                _cH.Position = mouseCoordinates;
+                _cH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
+                _cH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
+            }
+
+            plot?.Refresh();
         }
 
         private void ChangeViewBackground(FormsPlot plot)
