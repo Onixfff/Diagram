@@ -49,7 +49,7 @@ namespace Diagram.Presenters
                     await UpdateMainPlotAsync(_startIdInitializeMainPlot, _cts.Token);
                     InitializePlotsAutoRefresh(_cts.Token);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //ignored
                 }
