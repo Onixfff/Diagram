@@ -1,29 +1,27 @@
-﻿using NLog;
-using System;
-using ScottPlot;
-using System.Drawing;
-using Diagram.Interfaces;
-using ScottPlot.WinForms;
-using ScottPlot.Plottables;
-using System.Windows.Forms;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using Diagram.Interfaces;
 using Diagram.Models;
+using NLog;
+using ScottPlot;
+using ScottPlot.Palettes;
+using ScottPlot.Plottables;
+using ScottPlot.WinForms;
+using Color = System.Drawing.Color;
 
 namespace Diagram.Views
 {
     public partial class MainForm : Form, IDisposable, IMainForm
     {
-        public event EventHandler FormLoaded;
-        public event EventHandler<int> PlotSelected;
-        public event EventHandler CancelRequested;
-
         private readonly ILogger _logger;
-
-        private Crosshair _cH;
-        private readonly Dictionary<int, FormsPlot> contorlFormPlot = new Dictionary<int, FormsPlot>();
 
         //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
+        private readonly Dictionary<int, FormsPlot> contorlFormPlot = new Dictionary<int, FormsPlot>();
+
+        private Crosshair _cH;
 
         public MainForm(ILogger logger)
         {
@@ -35,16 +33,9 @@ namespace Diagram.Views
             formsPlotMain.MouseDown += Plot_MouseDown;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            FormLoaded?.Invoke(this, EventArgs.Empty);
-            
-            InitializeMouseTracker(formsPlotMain);
-            ChangeViewBackground(formsPlotMain);
-
-            formsPlotMain.MouseMove += Plot_MouseMove;
-            formsPlotMain.MouseDown += Plot_MouseDown;
-        }
+        public event EventHandler FormLoaded;
+        public event EventHandler<int> PlotSelected;
+        public event EventHandler CancelRequested;
 
         public void DisplayMiniPlots(IEnumerable<MiniPlotData> plots)
         {
@@ -57,10 +48,7 @@ namespace Diagram.Views
             flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.Controls.Clear();
 
-            foreach (var plotData in plots)
-            {
-                CreatesMiniPlot(plotData.Id, plotData.XValue, plotData.YTime);
-            }
+            foreach (var plotData in plots) CreatesMiniPlot(plotData.Id, plotData.XValue, plotData.YTime);
 
             flowLayoutPanel1.ResumeLayout();
         }
@@ -87,8 +75,37 @@ namespace Diagram.Views
                 progressBar1.Invoke(new Action(() => ShowProgressIndicator(show)));
                 return;
             }
+
             // Например, отобразить ProgressBar
-            progressBar1.Visible = show;    
+            progressBar1.Visible = show;
+        }
+
+        public void UpdateProgress(int progressPercentage)
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke(new Action<int>(UpdateProgress), progressPercentage);
+                return;
+            }
+
+            progressBar1.Value = Math.Max(0, Math.Min(100, progressPercentage));
+        }
+
+        public void ShowErrorMessage(string message)
+        {
+            _logger.Warn($"вызвана ошибка {message}");
+            MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            FormLoaded?.Invoke(this, EventArgs.Empty);
+
+            InitializeMouseTracker(formsPlotMain);
+            ChangeViewBackground(formsPlotMain);
+
+            formsPlotMain.MouseMove += Plot_MouseMove;
+            formsPlotMain.MouseDown += Plot_MouseDown;
         }
 
         private void LeftFormsPlot_DoubleClick(object sender, EventArgs e)
@@ -96,11 +113,11 @@ namespace Diagram.Views
             var formPlot = (FormsPlot)sender;
             int idFormPlot;
 
-            bool isCompliteParse = int.TryParse(formPlot.Name, out idFormPlot);
+            var isCompliteParse = int.TryParse(formPlot.Name, out idFormPlot);
 
             if (isCompliteParse == false)
             {
-                string error = $"Неудалось преобразовать {nameof(formPlot.Name)} - {formPlot.Name} в int";
+                var error = $"Неудалось преобразовать {nameof(formPlot.Name)} - {formPlot.Name} в int";
                 _logger.Error(error);
                 throw new FormatException(error);
             }
@@ -117,10 +134,10 @@ namespace Diagram.Views
                 return;
             }
 
-            FormsPlot formsPlot = new FormsPlot()
+            var formsPlot = new FormsPlot
             {
                 Size = _sizeFormPlot,
-                AutoScroll = true,
+                AutoScroll = true
             };
 
             formsPlot.Name = idFormPort.ToString();
@@ -128,7 +145,7 @@ namespace Diagram.Views
             formsPlot.Plot.XLabel("Time");
             formsPlot.Plot.Title(idFormPort.ToString());
             formsPlot.DoubleClick += LeftFormsPlot_DoubleClick;
-            
+
             ChangeViewBackground(formsPlot);
 
             flowLayoutPanel1.Controls.Add(formsPlot);
@@ -148,7 +165,7 @@ namespace Diagram.Views
 
             var scatter = plot.Plot.Add.Scatter(yValues, xValues);
 
-            scatter.MarkerColor = new ScottPlot.Color(color: System.Drawing.Color.Red);
+            scatter.MarkerColor = new ScottPlot.Color(Color.Red);
             scatter.MarkerSize = 11.5f;
             scatter.LineWidth = 3;
             scatter.LinePattern = LinePattern.DenselyDashed;
@@ -156,23 +173,6 @@ namespace Diagram.Views
 
             // Включаем автошкалирование
             plot.Plot.Axes.AutoScale();
-        }
-
-        public void UpdateProgress(int progressPercentage)
-        {
-            if (progressBar1.InvokeRequired)
-            {
-                progressBar1.Invoke(new Action<int>(UpdateProgress), progressPercentage);
-                return;
-            }
-
-            progressBar1.Value = Math.Max(0, Math.Min(100, progressPercentage));
-        }
-
-        public void ShowErrorMessage(string message)
-        {
-            _logger.Warn($"вызвана ошибка {message}" );
-            MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void InitializeMouseTracker(FormsPlot plot)
@@ -186,20 +186,20 @@ namespace Diagram.Views
 
         private void Plot_MouseDown(object sender, MouseEventArgs e)
         {
-            FormsPlot plot = sender as FormsPlot;
+            var plot = sender as FormsPlot;
 
-            Pixel mousePixel = new Pixel(e.X, e.Y);
-            Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+            var mousePixel = new Pixel(e.X, e.Y);
+            var mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
             Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3} (mouse down)";
         }
 
         private void Plot_MouseMove(object sender, MouseEventArgs e)
         {
-            FormsPlot plot = sender as FormsPlot;
+            var plot = sender as FormsPlot;
 
-            Pixel mousePixel = new Pixel(e.X, e.Y);
-            Coordinates mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
-            this.Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
+            var mousePixel = new Pixel(e.X, e.Y);
+            var mouseCoordinates = plot.Plot.GetCoordinates(mousePixel);
+            Text = $"X={mouseCoordinates.X:N3}, Y={mouseCoordinates.Y:N3}";
             _cH.Position = mouseCoordinates;
             _cH.VerticalLine.Text = $"{mouseCoordinates.X:N3}";
             _cH.HorizontalLine.Text = $"{mouseCoordinates.Y:N3}";
@@ -208,7 +208,7 @@ namespace Diagram.Views
 
         private void ChangeViewBackground(FormsPlot plot)
         {
-            plot.Plot.Add.Palette = new ScottPlot.Palettes.Penumbra();
+            plot.Plot.Add.Palette = new Penumbra();
 
             // change figure colors
             plot.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#181818");
@@ -229,10 +229,7 @@ namespace Diagram.Views
             formsPlotMain.Plot.Clear();
             formsPlotMain.Dispose();
 
-            foreach (FormsPlot item in flowLayoutPanel1.Controls)
-            {
-                item.Dispose();
-            }
+            foreach (FormsPlot item in flowLayoutPanel1.Controls) item.Dispose();
 
             base.OnFormClosed(e);
         }
