@@ -17,7 +17,6 @@ namespace Diagram.Views
     {
         private readonly ILogger _logger;
 
-        //Размер мини диаграм
         private readonly Size _sizeFormPlot = new Size(355, 247);
         private readonly Dictionary<int, FormsPlot> contorlFormPlot = new Dictionary<int, FormsPlot>();
 
@@ -170,7 +169,6 @@ namespace Diagram.Views
             scatter.LinePattern = LinePattern.DenselyDashed;
             scatter.MarkerShape = MarkerShape.FilledDiamond;
 
-            // Включаем автошкалирование
             plot.Plot.Axes.AutoScale();
         }
 
@@ -220,11 +218,9 @@ namespace Diagram.Views
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            //Отписка от событий
             formsPlotMain.MouseMove -= Plot_MouseMove;
             formsPlotMain.MouseDown -= Plot_MouseDown;
 
-            //Очиска графиков и освобождение ресурсов
             formsPlotMain.Plot.Clear();
             formsPlotMain.Dispose();
 
