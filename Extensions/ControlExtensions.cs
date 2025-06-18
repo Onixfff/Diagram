@@ -3,11 +3,11 @@ using System.Windows.Forms;
 
 namespace Diagram.Extensions
 {
-    public class ControlExtensions
+    public static class ControlExtensions
     {
-        public static bool IsVisibleToUser(Control control)
+        public static bool IsVisibleToUser(this Control control)
         {
-            if (control.Visible || control.IsDisposed) return false;
+            if (control == null || !control.Visible || control.IsDisposed) return false;
 
             Rectangle screenBounds = control.RectangleToScreen(control.ClientRectangle);
             Rectangle formBounds = control.FindForm()?.Bounds ?? Screen.PrimaryScreen.Bounds;
